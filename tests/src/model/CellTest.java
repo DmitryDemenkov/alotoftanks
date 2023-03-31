@@ -1,6 +1,5 @@
 package model;
 
-import model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -122,7 +121,7 @@ public class CellTest {
 
     @Test
     public void setNeighbour_northNeighbour(){
-        Cell neighbour = new Cell(new Position(0, 1));
+        Cell neighbour = new Cell(new Position(0, -1));
 
         cell.setNeighbour(neighbour);
 
@@ -132,7 +131,7 @@ public class CellTest {
 
     @Test
     public void setNeighbour_southNeighbour(){
-        Cell neighbour = new Cell(new Position(0, -1));
+        Cell neighbour = new Cell(new Position(0, 1));
 
         cell.setNeighbour(neighbour);
 
@@ -162,8 +161,8 @@ public class CellTest {
 
     @Test
     public void setNeighbour_FourNeighbours(){
-        Cell northNeighbour = new Cell(new Position(0, 1));
-        Cell southNeighbour = new Cell(new Position(0, -1));
+        Cell northNeighbour = new Cell(new Position(0, -1));
+        Cell southNeighbour = new Cell(new Position(0, 1));
         Cell eastNeighbour = new Cell(new Position(1, 0));
         Cell westNeighbour = new Cell(new Position(-1, 0));
 
