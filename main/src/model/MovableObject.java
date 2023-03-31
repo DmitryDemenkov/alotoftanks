@@ -2,11 +2,22 @@ package model;
 
 public abstract class MovableObject extends ObjectInCell{
 
+    private Direction _direction;
+
     public Direction getDirection(){
-        return null;
+        return _direction;
+    }
+
+    void setDirection(Direction direction){
+        _direction = direction;
     }
 
     public boolean move(){
-        return false;
+        Cell nextCell = getCell().neighbour(getDirection());
+        if (nextCell == null){
+            return false;
+        }
+
+        return nextCell.addObject(this);
     }
 }
