@@ -1,7 +1,5 @@
 package model;
 
-import model.Direction;
-import model.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +19,7 @@ class PositionTest {
     public void shift_shiftToNorthOnPositiveDelta(){
         Position newPosition = position.shift(Direction.NORTH, 1);
 
-        Position expectedPosition = new Position(0, 1);
+        Position expectedPosition = new Position(0, -1);
 
         Assertions.assertNotNull(newPosition);
 
@@ -36,7 +34,7 @@ class PositionTest {
     public void shift_shiftToSouthOnPositiveDelta(){
         Position newPosition = position.shift(Direction.SOUTH, 1);
 
-        Position expectedPosition = new Position(0, -1);
+        Position expectedPosition = new Position(0, 1);
 
         Assertions.assertNotNull(newPosition);
 
@@ -81,7 +79,7 @@ class PositionTest {
     public void shift_shiftToNorthOnNegativeDelta(){
         Position newPosition = position.shift(Direction.NORTH, -1);
 
-        Position expectedPosition = new Position(0, -1);
+        Position expectedPosition = new Position(0, 1);
 
         Assertions.assertNotNull(newPosition);
 
@@ -96,7 +94,7 @@ class PositionTest {
     public void shift_shiftToSouthOnNegativeDelta(){
         Position newPosition = position.shift(Direction.SOUTH, -1);
 
-        Position expectedPosition = new Position(0, 1);
+        Position expectedPosition = new Position(0, -1);
 
         Assertions.assertNotNull(newPosition);
 
