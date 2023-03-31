@@ -1,14 +1,29 @@
 package model;
 
 import events.IObjectInCellEventListener;
+import events.ObjectInCellEvent;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class ObjectInCell {
 
+    private Cell _cell;
+
     public Cell getCell(){
-        return null;
+        return _cell;
     }
 
-    void setCell(Cell cell){ }
+    void setCell(Cell cell){
+        if (_cell != null){
+            _cell.takeObject(this);
+        }
+        _cell = cell;
+    }
+
+    void unsetCell(){
+        _cell = null;
+    }
 
     public abstract boolean canFaceWith(ObjectInCell object);
 
@@ -16,5 +31,15 @@ public abstract class ObjectInCell {
 
     abstract void update();
 
-    public void addListener(IObjectInCellEventListener listener) { }
+    private final Set<IObjectInCellEventListener> _listeners = new HashSet<>();
+
+    public void addListener(IObjectInCellEventListener listener) {
+        _listeners.add(listener);
+    }
+
+    protected void fireEvent(ObjectInCellEvent event){
+        for (IObjectInCellEventListener listener : _listeners){
+            listener.onObjectInCellAction(event);
+        }
+    }
 }
