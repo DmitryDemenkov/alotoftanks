@@ -27,7 +27,11 @@ public abstract class ObjectInCell {
 
     public abstract boolean canFaceWith(ObjectInCell object);
 
-    public abstract void faceWith(ObjectInCell object);
+    public void faceWith(ObjectInCell object){
+        if (!canFaceWith(object)){
+            throw new IllegalArgumentException();
+        }
+    }
 
     abstract void update();
 
