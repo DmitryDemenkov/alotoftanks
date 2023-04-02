@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BulletTest {
 
     Bullet bullet;
@@ -16,7 +19,8 @@ public class BulletTest {
     public void createTestConfiguration(){
         startCell = new Cell(new Position(0, 0));
         targetCell = new Cell(new Position(0, 1));
-        bullet = new Bullet(Direction.NORTH, startCell);
+        startCell.setNeighbour(targetCell);
+        bullet = new Bullet(Direction.SOUTH, startCell);
     }
 
     @Test
@@ -127,7 +131,7 @@ public class BulletTest {
 
         bullet.faceWith(water);
 
-        Assertions.assertNotNull(actualEvents[0]);
+        Assertions.assertNull(actualEvents[0]);
     }
 
     @Test
@@ -171,7 +175,7 @@ public class BulletTest {
 
     @Test
     public void move_movingInCellWithWall(){
-        ObjectInCellEvent[] actualEvents = {null};
+        List<ObjectInCellEvent> events = new ArrayList<>();
 
         targetCell.addObject(new Wall());
 
@@ -179,15 +183,20 @@ public class BulletTest {
             @Override
             public void onObjectInCellAction(ObjectInCellEvent event) {
                 Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DESTROYING, event.getType());
                 Assertions.assertSame(targetCell, bullet.getCell());
-                actualEvents[0] = event;
+                events.add(event);
             }
         });
 
         bullet.move();
 
-        Assertions.assertNotNull(actualEvents[0]);
+        List<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.DESTROYING));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for (int i = 0; i < expectedEvents.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+        }
     }
 
     @Test void update_moving(){
