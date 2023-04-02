@@ -3,14 +3,19 @@ package model;
 public class Size {
 
     public Size(int width, int height){
-
+        _width = width;
+        _height = height;
     }
+
+    private final int _width;
 
     public int width(){
-        return 0;
+        return _width;
     }
 
+    private final int _height;
+
     public int height(){
-        return 0;
+        return _height;
     }
 }
