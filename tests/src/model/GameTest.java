@@ -42,7 +42,7 @@ public class GameTest {
     @Test
     public void tankRotation_success(){
         Tank activeTank = game.activeTank();
-        activeTank.setDirection(Direction.WEST);
+        activeTank.rotate(Direction.WEST);
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
         expectedObjectEvents.add(new ObjectInCellEvent(activeTank, ObjectInCellEvent.EventType.MOVING));
@@ -59,7 +59,7 @@ public class GameTest {
     @Test
     public void tankRotation_notSuccess(){
         Tank activeTank = game.activeTank();
-        activeTank.setDirection(Direction.NORTH);
+        activeTank.rotate(Direction.NORTH);
 
         Assertions.assertEquals(0, objectInCellEvents.size());
         Assertions.assertEquals(0, gameStates.size());
@@ -68,7 +68,7 @@ public class GameTest {
     @Test
     public void tankMoving_success(){
         Tank activeTank = game.activeTank();
-        activeTank.setDirection(Direction.WEST);
+        activeTank.rotate(Direction.EAST);
         activeTank.move();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
@@ -115,15 +115,16 @@ public class GameTest {
 
     @Test
     public void tankShootingEnemyTank(){
+        Bullet testBullet = new Bullet(Direction.NORTH, new Cell(new Position(0, 0)));
         Tank tank1 = game.activeTank();
-        tank1.setDirection(Direction.WEST);
+        tank1.rotate(Direction.EAST);
         tank1.move();
 
         Tank tank2 = game.activeTank();
-        tank2.setDirection(Direction.EAST);
+        tank2.rotate(Direction.WEST);
         tank2.move();
 
-        tank1.setDirection(Direction.SOUTH);
+        tank1.rotate(Direction.SOUTH);
         tank1.shoot();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
@@ -131,10 +132,11 @@ public class GameTest {
         expectedObjectEvents.add(new ObjectInCellEvent(tank1, ObjectInCellEvent.EventType.MOVING));
         expectedObjectEvents.add(new ObjectInCellEvent(tank2, ObjectInCellEvent.EventType.MOVING));
         expectedObjectEvents.add(new ObjectInCellEvent(tank2, ObjectInCellEvent.EventType.MOVING));
-        expectedObjectEvents.add(new ObjectInCellEvent(new BulletForTest(), ObjectInCellEvent.EventType.MOVING));
-        expectedObjectEvents.add(new ObjectInCellEvent(new BulletForTest(), ObjectInCellEvent.EventType.MOVING));
+        expectedObjectEvents.add(new ObjectInCellEvent(tank1, ObjectInCellEvent.EventType.MOVING));
+        expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.MOVING));
+        expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.MOVING));
         expectedObjectEvents.add(new ObjectInCellEvent(tank2, ObjectInCellEvent.EventType.DAMAGED));
-        expectedObjectEvents.add(new ObjectInCellEvent(new BulletForTest(), ObjectInCellEvent.EventType.DESTROYING));
+        expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.DESTROYING));
 
         ArrayList<Game.State> expectedGameStates = new ArrayList<>();
         expectedGameStates.add(Game.State.GAME_IS_ON);
@@ -155,14 +157,17 @@ public class GameTest {
 
     @Test
     public void gameFinished_tankDestroyEnemyHeadquarters(){
+        Bullet testBullet = new Bullet(Direction.NORTH, new Cell(new Position(0, 0)));
         Tank activeTank = game.activeTank();
+        activeTank.rotate(Direction.EAST);
         activeTank.shoot();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
-        expectedObjectEvents.add(new ObjectInCellEvent(new BulletForTest(), ObjectInCellEvent.EventType.MOVING));
-        expectedObjectEvents.add(new ObjectInCellEvent(new BulletForTest(), ObjectInCellEvent.EventType.MOVING));
+        expectedObjectEvents.add(new ObjectInCellEvent(activeTank, ObjectInCellEvent.EventType.MOVING));
+        expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.MOVING));
+        expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.MOVING));
         expectedObjectEvents.add(new ObjectInCellEvent(new Headquarters(), ObjectInCellEvent.EventType.DESTROYING));
-        expectedObjectEvents.add(new ObjectInCellEvent(new BulletForTest(), ObjectInCellEvent.EventType.DESTROYING));
+        expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.DESTROYING));
 
         ArrayList<Game.State> expectedGameStates = new ArrayList<>();
         expectedGameStates.add(Game.State.WINNER_FOUND);
