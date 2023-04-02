@@ -20,10 +20,10 @@ public class CellTest {
         Assertions.assertEquals(1, cell.getPosition().getX());
         Assertions.assertEquals(2, cell.getPosition().getY());
         Assertions.assertEquals(0, cell.getObjects().size());
-        Assertions.assertNull(cell.neighbour(Direction.NORTH));
-        Assertions.assertNull(cell.neighbour(Direction.SOUTH));
-        Assertions.assertNull(cell.neighbour(Direction.EAST));
-        Assertions.assertNull(cell.neighbour(Direction.WEST));
+        Assertions.assertNull(cell.getNeighbour(Direction.NORTH));
+        Assertions.assertNull(cell.getNeighbour(Direction.SOUTH));
+        Assertions.assertNull(cell.getNeighbour(Direction.EAST));
+        Assertions.assertNull(cell.getNeighbour(Direction.WEST));
     }
 
     @Test
@@ -125,8 +125,8 @@ public class CellTest {
 
         cell.setNeighbour(neighbour);
 
-        Assertions.assertSame(neighbour, cell.neighbour(Direction.NORTH));
-        Assertions.assertSame(cell, neighbour.neighbour(Direction.SOUTH));
+        Assertions.assertSame(neighbour, cell.getNeighbour(Direction.NORTH));
+        Assertions.assertSame(cell, neighbour.getNeighbour(Direction.SOUTH));
     }
 
     @Test
@@ -135,8 +135,8 @@ public class CellTest {
 
         cell.setNeighbour(neighbour);
 
-        Assertions.assertSame(neighbour, cell.neighbour(Direction.SOUTH));
-        Assertions.assertSame(cell, neighbour.neighbour(Direction.NORTH));
+        Assertions.assertSame(neighbour, cell.getNeighbour(Direction.SOUTH));
+        Assertions.assertSame(cell, neighbour.getNeighbour(Direction.NORTH));
     }
 
     @Test
@@ -145,8 +145,8 @@ public class CellTest {
 
         cell.setNeighbour(neighbour);
 
-        Assertions.assertSame(neighbour, cell.neighbour(Direction.EAST));
-        Assertions.assertSame(cell, neighbour.neighbour(Direction.WEST));
+        Assertions.assertSame(neighbour, cell.getNeighbour(Direction.EAST));
+        Assertions.assertSame(cell, neighbour.getNeighbour(Direction.WEST));
     }
 
     @Test
@@ -155,8 +155,8 @@ public class CellTest {
 
         cell.setNeighbour(neighbour);
 
-        Assertions.assertSame(neighbour, cell.neighbour(Direction.WEST));
-        Assertions.assertSame(cell, neighbour.neighbour(Direction.EAST));
+        Assertions.assertSame(neighbour, cell.getNeighbour(Direction.WEST));
+        Assertions.assertSame(cell, neighbour.getNeighbour(Direction.EAST));
     }
 
     @Test
@@ -171,10 +171,10 @@ public class CellTest {
         cell.setNeighbour(eastNeighbour);
         cell.setNeighbour(westNeighbour);
 
-        Assertions.assertSame(northNeighbour, cell.neighbour(Direction.NORTH));
-        Assertions.assertSame(southNeighbour, cell.neighbour(Direction.SOUTH));
-        Assertions.assertSame(eastNeighbour, cell.neighbour(Direction.EAST));
-        Assertions.assertSame(westNeighbour, cell.neighbour(Direction.WEST));
+        Assertions.assertSame(northNeighbour, cell.getNeighbour(Direction.NORTH));
+        Assertions.assertSame(southNeighbour, cell.getNeighbour(Direction.SOUTH));
+        Assertions.assertSame(eastNeighbour, cell.getNeighbour(Direction.EAST));
+        Assertions.assertSame(westNeighbour, cell.getNeighbour(Direction.WEST));
     }
 
     @Test

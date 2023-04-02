@@ -64,7 +64,7 @@ public class Tank extends MovableObject implements Damageable {
             return false;
         }
 
-        Cell targetCell = getCell().neighbour(getDirection());
+        Cell targetCell = getCell().getNeighbour(getDirection());
         if (targetCell == null){
             return false;
         }

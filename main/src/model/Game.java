@@ -8,19 +8,27 @@ import model.environment.Environment;
 
 import java.util.*;
 
+/**
+ * Главный класс игровой модели
+ */
 public class Game {
 
+    /**
+     * Состояние игры
+     */
     public enum State {
         GAME_IS_ON,
         WINNER_FOUND
     }
 
-    private final Field _field;
-
     public Game(Environment environment){
         _field = new Field(environment);
         _field.addObjectInCellListener(new ObjectListener());
     }
+
+    /* ----------------- Игровое поле ----------------- */
+
+    private final Field _field;
 
     public void start() {
         ArrayList<Tank> tanks = _field.getTanks();
@@ -34,6 +42,8 @@ public class Game {
         activeTank().setActive(true);
     }
 
+    /* ---------------- Танки ----------------- */
+
     private Tank _activeTank = null;
 
     public Tank activeTank() {
@@ -46,18 +56,24 @@ public class Game {
         return _winner;
     }
 
-    private final Queue<ObjectInCellEvent> activeEvents = new ArrayDeque<>();
+    private Tank getOtherTank(Tank tank){
+        return _field.getTanks().stream().filter(t -> t != tank).findAny().orElse(null);
+    }
+
+    /* ----------------- Игровой цикл ------------ */
+
+    private final Queue<ObjectInCellEvent> _activeEvents = new ArrayDeque<>();
 
     private void gameLoop(){
-        int eventsCount = activeEvents.size();
+        int eventsCount = _activeEvents.size();
         while (eventsCount > 0){
             for (int i = 0; i < eventsCount; i++){
-                ObjectInCellEvent event = activeEvents.remove();
+                ObjectInCellEvent event = _activeEvents.remove();
                 event.getObject().update();
                 fireObjectChanged(event);
             }
             waitRendering();
-            eventsCount = activeEvents.size();
+            eventsCount = _activeEvents.size();
         }
     }
 
@@ -88,15 +104,15 @@ public class Game {
         return state;
     }
 
-    private Tank getOtherTank(Tank tank){
-        return _field.getTanks().stream().filter(t -> t != tank).findAny().orElse(null);
-    }
+    /* --------------- Игровые слушатели ---------------- */
 
     private final Set<IGameEventListener> _listeners = new HashSet<>();
 
     public void addListener(IGameEventListener listener){
         _listeners.add(listener);
     }
+
+    /* ---------------- События -------------------- */
 
     private void fireObjectChanged(ObjectInCellEvent event){
         for (IGameEventListener listener : _listeners){
@@ -110,14 +126,20 @@ public class Game {
         }
     }
 
+    /**
+     * Слушатель игровых объектов нв поле
+     */
     private class ObjectListener implements IObjectInCellEventListener{
 
         @Override
         public void onObjectInCellAction(ObjectInCellEvent event) {
-            activeEvents.add(event);
+            _activeEvents.add(event);
         }
     }
 
+    /**
+     * Слушатель танков
+     */
     private class TankListener implements ITankEventListener{
 
         @Override
@@ -125,7 +147,7 @@ public class Game {
             if (event.getObject() == activeTank() && event.getType() == ObjectInCellEvent.EventType.MOVING){
                 fireObjectChanged(event);
             } else {
-                activeEvents.add(event);
+                _activeEvents.add(event);
             }
         }
 
@@ -148,7 +170,7 @@ public class Game {
         public void onTankShot(ObjectInCellEvent event) {
             activeTank().setActive(false);
 
-            activeEvents.add(event);
+            _activeEvents.add(event);
             gameLoop();
             State state = checkState();
             if (state == State.GAME_IS_ON){

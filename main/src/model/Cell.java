@@ -2,6 +2,9 @@ package model;
 
 import java.util.*;
 
+/**
+ * Фрагмент поля, который может содержать в себе объекты
+ */
 public class Cell {
 
     private final Position _position;
@@ -13,6 +16,8 @@ public class Cell {
     public Cell(Position position){
         _position = position;
     }
+
+    /* -------------- Объекты в ячейке ---------------- */
 
     private final Set<ObjectInCell> _objects = new HashSet<>();
 
@@ -57,9 +62,11 @@ public class Cell {
         return removedObject;
     }
 
+    /* ------------------ Соседи ---------------- */
+
     private final Set<Cell> _neighbours = new HashSet<>();
 
-    public Cell neighbour(Direction direction){
+    public Cell getNeighbour(Direction direction){
         Position neighbourPosition = getPosition().shift(direction, 1);
 
         return _neighbours.stream().

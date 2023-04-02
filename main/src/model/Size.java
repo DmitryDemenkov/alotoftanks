@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Размеры игрового поля
+ */
 public class Size {
 
     public Size(int width, int height){

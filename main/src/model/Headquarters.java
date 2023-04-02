@@ -2,9 +2,14 @@ package model;
 
 import events.ObjectInCellEvent;
 
+/**
+ * Штаб танка
+ */
 public class Headquarters extends ObjectInCell implements Damageable {
 
-    private boolean isDestroying = false;
+    private boolean _isDestroying = false;
+
+    /* ------------------ Танк -------------- */
 
     private Tank _tank;
 
@@ -31,14 +36,14 @@ public class Headquarters extends ObjectInCell implements Damageable {
         super.faceWith(object);
 
         if (object instanceof Bullet){
-            isDestroying = true;
+            _isDestroying = true;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYING));
         }
     }
 
     @Override
     void update() {
-        if (isDestroying){
+        if (_isDestroying){
             getCell().takeObject(this);
         }
     }

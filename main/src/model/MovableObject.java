@@ -13,7 +13,7 @@ public abstract class MovableObject extends ObjectInCell{
     }
 
     public boolean move(){
-        Cell nextCell = getCell().neighbour(getDirection());
+        Cell nextCell = getCell().getNeighbour(getDirection());
         if (nextCell == null){
             return false;
         }

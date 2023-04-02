@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Позиция ячейки на поле
+ */
 public class Position {
 
     private final int _x;

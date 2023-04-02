@@ -3,6 +3,9 @@ package model.environment;
 import model.Field;
 import model.Size;
 
+/**
+ * Окружение, определяющее размеры поля и наполняющее его объектами
+ */
 public abstract class Environment {
 
     public abstract Size fieldSize();

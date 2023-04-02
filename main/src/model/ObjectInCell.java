@@ -6,7 +6,12 @@ import events.ObjectInCellEvent;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Объект, располагающийся в ячейке на поле
+ */
 public abstract class ObjectInCell {
+
+    /* --------------- Ячейка ---------------------- */
 
     private Cell _cell;
 
@@ -25,6 +30,8 @@ public abstract class ObjectInCell {
         _cell = null;
     }
 
+    /* -------------------------- Взаимодействие с другими объектами --------------- */
+
     public abstract boolean canFaceWith(ObjectInCell object);
 
     public void faceWith(ObjectInCell object){
@@ -34,6 +41,8 @@ public abstract class ObjectInCell {
     }
 
     abstract void update();
+
+    /* -------------------- Слушатели и события ------------------- */
 
     private final Set<IObjectInCellEventListener> _listeners = new HashSet<>();
 

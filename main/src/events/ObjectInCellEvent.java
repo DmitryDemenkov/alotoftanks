@@ -2,6 +2,9 @@ package events;
 
 import model.ObjectInCell;
 
+/**
+ * События, генерируемы игровыми объектами
+ */
 public class ObjectInCellEvent {
 
     public enum EventType{

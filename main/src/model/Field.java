@@ -5,13 +5,23 @@ import model.environment.Environment;
 
 import java.util.ArrayList;
 
+/**
+ * Игровое поле, состоящее из ячеек
+ */
 public class Field {
-
-    private final ArrayList<Cell> _cells = new ArrayList<>();
 
     public Field(Environment environment){
         createCells(environment.fieldSize().width(), environment.fieldSize().height());
         environment.fillField(this);
+    }
+
+    /* -------------------- Ячейки ------------------- */
+
+    private final ArrayList<Cell> _cells = new ArrayList<>();
+
+    public Cell getCell(Position position){
+        return _cells.stream().
+                filter(cell -> cell.getPosition().equals(position)).findAny().orElse(null);
     }
 
     private void createCells(int width, int height){
@@ -35,6 +45,8 @@ public class Field {
         }
     }
 
+    /* ----------------- Объекты на поле --------------------- */
+
     void addObjectInCellListener(IObjectInCellEventListener listener){
         for (Cell cell : _cells){
             for (ObjectInCell object : cell.getObjects()){
@@ -54,10 +66,5 @@ public class Field {
             }
         }
         return tanks;
-    }
-
-    public Cell getCell(Position position){
-        return _cells.stream().
-                filter(cell -> cell.getPosition().equals(position)).findAny().orElse(null);
     }
 }

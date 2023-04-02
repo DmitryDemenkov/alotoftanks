@@ -2,9 +2,12 @@ package model;
 
 import events.ObjectInCellEvent;
 
+/**
+ * Снаряд выпускаемый танком
+ */
 public class Bullet extends MovableObject{
 
-    private boolean isDestroying = false;
+    private boolean _isDestroying = false;
 
     public Bullet(Direction direction, Cell startCell){
         setDirection(direction);
@@ -21,14 +24,14 @@ public class Bullet extends MovableObject{
         super.faceWith(object);
 
         if (object instanceof Damageable){
-            isDestroying = true;
+            _isDestroying = true;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYING));
         }
     }
 
     @Override
     void update() {
-        if (isDestroying){
+        if (_isDestroying){
             getCell().takeObject(this);
         } else {
             move();
@@ -38,7 +41,7 @@ public class Bullet extends MovableObject{
     @Override
     public boolean move(){
         boolean isMoved = super.move();
-        if (!isDestroying && isMoved){
+        if (!_isDestroying && isMoved){
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
         } else if (!isMoved){
             getCell().takeObject(this);
