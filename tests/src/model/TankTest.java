@@ -1,6 +1,5 @@
 package model;
 
-import events.IObjectInCellEventListener;
 import events.ITankEventListener;
 import events.ObjectInCellEvent;
 import org.junit.jupiter.api.Assertions;
@@ -72,7 +71,22 @@ public class TankTest {
         Bullet bullet = new BulletForTest();
         ObjectInCellEvent[] actualEvents = {null};
 
-        tank.addListener(new IObjectInCellEventListener() {
+        tank.addListener(new ITankEventListener() {
+            @Override
+            public void onTankMoved(ObjectInCellEvent event) {
+                throw new RuntimeException("Unexpected event");
+            }
+
+            @Override
+            public void onTankShot(ObjectInCellEvent event) {
+                throw new RuntimeException("Unexpected event");
+            }
+
+            @Override
+            public void onTankSkipStep(ObjectInCellEvent event) {
+                throw new RuntimeException("Unexpected event");
+            }
+
             @Override
             public void onObjectInCellAction(ObjectInCellEvent event) {
                 Assertions.assertSame(tank, event.getObject());
@@ -90,15 +104,13 @@ public class TankTest {
     }
 
     @Test
-    public void setDirection_rotateTank(){
+    public void rotate_rotateTank(){
         ObjectInCellEvent[] actualEvents = {null};
 
         tank.addListener(new ITankEventListener() {
             @Override
             public void onTankMoved(ObjectInCellEvent event) {
-                Assertions.assertSame(tank, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVING, event.getType());
-                actualEvents[0] = event;
+                throw new RuntimeException("Unexpected event");
             }
 
             @Override
@@ -113,18 +125,20 @@ public class TankTest {
 
             @Override
             public void onObjectInCellAction(ObjectInCellEvent event) {
-                throw new RuntimeException("Unexpected event");
+                Assertions.assertSame(tank, event.getObject());
+                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVING, event.getType());
+                actualEvents[0] = event;
             }
         });
 
-        tank.setDirection(Direction.SOUTH);
+        tank.rotate(Direction.SOUTH);
 
         Assertions.assertNotNull(actualEvents[0]);
         Assertions.assertEquals(Direction.SOUTH, tank.getDirection());
     }
 
     @Test
-    public void setDirection_rotateTankOnSameDirection(){
+    public void rotate_rotateTankOnSameDirection(){
         tank.addListener(new ITankEventListener() {
             @Override
             public void onTankMoved(ObjectInCellEvent event) {
@@ -147,20 +161,20 @@ public class TankTest {
             }
         });
 
-        tank.setDirection(Direction.NORTH);
+        tank.rotate(Direction.NORTH);
 
         Assertions.assertEquals(Direction.NORTH, tank.getDirection());
     }
 
     @Test
     public void move_movingInEmptyCell(){
-        Cell startCell = new Cell(new Position(0, 0));
-        Cell targetCell = new Cell(new Position(0, 1));
+        Cell startCell = new Cell(new Position(0, 1));
+        Cell targetCell = new Cell(new Position(0, 0));
         startCell.setNeighbour(targetCell);
         ObjectInCellEvent[] actualEvents = {null};
 
         startCell.addObject(tank);
-        tank.setDirection(Direction.NORTH);
+        tank.rotate(Direction.NORTH);
 
         tank.addListener(new ITankEventListener() {
             @Override
@@ -202,7 +216,7 @@ public class TankTest {
 
         startCell.addObject(tank);
         targetCell.addObject(wall);
-        tank.setDirection(Direction.NORTH);
+        tank.rotate(Direction.NORTH);
 
         tank.addListener(new ITankEventListener() {
             @Override
@@ -236,7 +250,7 @@ public class TankTest {
         Cell startCell = new Cell(new Position(0, 0));
 
         startCell.addObject(tank);
-        tank.setDirection(Direction.NORTH);
+        tank.rotate(Direction.NORTH);
 
         tank.addListener(new ITankEventListener() {
             @Override
@@ -262,18 +276,19 @@ public class TankTest {
 
         boolean result = tank.move();
 
-        Assertions.assertTrue(result);
+        Assertions.assertFalse(result);
+        Assertions.assertSame(startCell, tank.getCell());
     }
 
     @Test
     public void shoot_shootInEmptyCell(){
-        Cell startCell = new Cell(new Position(0, 0));
-        Cell targetCell = new Cell(new Position(0, 1));
+        Cell startCell = new Cell(new Position(0, 1));
+        Cell targetCell = new Cell(new Position(0, 0));
         startCell.setNeighbour(targetCell);
         ObjectInCellEvent[] actualEvents = {null};
 
         startCell.addObject(tank);
-        tank.setDirection(Direction.NORTH);
+        tank.rotate(Direction.NORTH);
 
         tank.addListener(new ITankEventListener() {
             @Override
@@ -310,7 +325,7 @@ public class TankTest {
         Cell startCell = new Cell(new Position(0, 0));
 
         startCell.addObject(tank);
-        tank.setDirection(Direction.NORTH);
+        tank.rotate(Direction.NORTH);
 
         tank.addListener(new ITankEventListener() {
             @Override
@@ -336,7 +351,7 @@ public class TankTest {
 
         boolean result = tank.shoot();
 
-        Assertions.assertTrue(result);
+        Assertions.assertFalse(result);
     }
 
     @Test
@@ -377,7 +392,22 @@ public class TankTest {
         Bullet bullet = new BulletForTest();
         ObjectInCellEvent[] actualEvents = {null};
 
-        tank.addListener(new IObjectInCellEventListener() {
+        tank.addListener(new ITankEventListener() {
+            @Override
+            public void onTankMoved(ObjectInCellEvent event) {
+                throw new RuntimeException("Unexpected event");
+            }
+
+            @Override
+            public void onTankShot(ObjectInCellEvent event) {
+                throw new RuntimeException("Unexpected event");
+            }
+
+            @Override
+            public void onTankSkipStep(ObjectInCellEvent event) {
+                throw new RuntimeException("Unexpected event");
+            }
+
             @Override
             public void onObjectInCellAction(ObjectInCellEvent event) {
                 Assertions.assertSame(tank, event.getObject());
