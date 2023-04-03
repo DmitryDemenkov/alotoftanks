@@ -7,10 +7,16 @@ import events.ObjectInCellEvent;
  */
 public class Headquarters extends ObjectInCell implements Damageable {
 
+    /**
+     * Состояние штабы, true если уничтожен
+     */
     private boolean _isDestroying = false;
 
     /* ------------------ Танк -------------- */
 
+    /**
+     * Танк, относящийся с штабу
+     */
     private Tank _tank;
 
     public Tank getTank(){

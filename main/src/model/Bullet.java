@@ -7,6 +7,9 @@ import events.ObjectInCellEvent;
  */
 public class Bullet extends MovableObject{
 
+    /**
+     * Сосотояние снаряда, true - если мнаряд уничтожен
+     */
     private boolean _isDestroying = false;
 
     public Bullet(Direction direction, Cell startCell){

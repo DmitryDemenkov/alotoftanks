@@ -7,6 +7,9 @@ import events.ObjectInCellEvent;
  */
 public class Wall extends Obstacle implements Damageable{
 
+    /**
+     * Состояние стены true если стена уничтожена
+     */
     private boolean _isDestroyed = false;
 
     @Override

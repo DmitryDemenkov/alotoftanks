@@ -22,6 +22,12 @@ public class Position {
         _y = y;
     }
 
+    /**
+     * Получить новую позицию, путем смещения данной
+     * @param direction направление смещения
+     * @param delta растояние смещения
+     * @return новая позиция
+     */
     public Position shift(Direction direction, int delta){
         int xDirection = 0;
         int yDirection = 0;

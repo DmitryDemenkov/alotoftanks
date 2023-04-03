@@ -9,6 +9,15 @@ import java.util.Set;
 
 public class Tank extends MovableObject implements Damageable {
 
+    public Tank(){
+        setDirection(Direction.NORTH);
+    }
+
+    /* --------------------- Состояние танка ------------------ */
+
+    /**
+     * Интерактивность танка, true если танком можно управлять
+     */
     private boolean _isActive = true;
 
     boolean isActive(){
@@ -19,12 +28,16 @@ public class Tank extends MovableObject implements Damageable {
         _isActive = active;
     }
 
+    /**
+     * Состояние танка, true если танк получает урон
+     */
     private boolean _isDamaged = false;
 
-    public Tank(){
-        setDirection(Direction.NORTH);
-    }
+    /* -------------------------- Штаб ----------------- */
 
+    /**
+     * Штаб, к которому относиться танк
+     */
     private Headquarters _headquarters;
 
     public Headquarters getHeadquarters(){
@@ -40,6 +53,12 @@ public class Tank extends MovableObject implements Damageable {
         headquarters.setTank(this);
     }
 
+    /* ----------------- Управление танком ------------ */
+
+    /**
+     * Поворот танка в указанном направлении
+     * @param direction направление поворота
+     */
     public void rotate(Direction direction){
         if (!isActive()){
             return;
@@ -53,12 +72,22 @@ public class Tank extends MovableObject implements Damageable {
         fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
     }
 
+    /**
+     * Время перезарядки орудия
+     */
     private final int RELOAD_TIME = 3;
 
+    /**
+     * Текущее время перезарядки
+     */
     private int _currentReloadTime = 0;
 
     public int getCurrentReloadTime() { return _currentReloadTime; }
 
+    /**
+     * Соверщить выстрел
+     * @return true если выстрел совершен успешно
+     */
     public boolean shoot(){
         if (!isActive() || getCurrentReloadTime() > 0){
             return false;
@@ -76,6 +105,9 @@ public class Tank extends MovableObject implements Damageable {
         return true;
     }
 
+    /**
+     * Пропустить ход
+     */
     public void pass(){
         if (!isActive()){
             return;
@@ -85,6 +117,25 @@ public class Tank extends MovableObject implements Damageable {
         fireSkip(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
     }
 
+    @Override
+    public boolean move() {
+        if (!isActive()){
+            return false;
+        }
+
+        boolean isMoved = super.move();
+        if (isMoved){
+            _currentReloadTime -= 1;
+            fireMoved(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
+        }
+        return isMoved;
+    }
+
+    /* -------------------- Взаимодействие с другими объектами ------------------ */
+
+    /**
+     * Здоровье танка
+     */
     private int _health = 3;
 
     public int getHealth(){
@@ -114,20 +165,11 @@ public class Tank extends MovableObject implements Damageable {
         }
     }
 
-    @Override
-    public boolean move() {
-        if (!isActive()){
-            return false;
-        }
+    /* -------------------------- Слушатели и события ------------------- */
 
-        boolean isMoved = super.move();
-        if (isMoved){
-            _currentReloadTime -= 1;
-            fireMoved(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
-        }
-        return isMoved;
-    }
-
+    /**
+     * Слушатели танка
+     */
     private final Set<ITankEventListener> _listeners = new HashSet<>();
 
     @Override
@@ -146,24 +188,39 @@ public class Tank extends MovableObject implements Damageable {
         }
     }
 
+    /**
+     * Сообщить об успешном перемещении танка
+     * @param event событие с информацией о танке
+     */
     private void fireMoved(ObjectInCellEvent event){
         for (ITankEventListener listener : _listeners){
             listener.onTankMoved(event);
         }
     }
 
+    /**
+     * Сообщить об успешном выстреле
+     * @param event событие с информацией о выпущенном снаряде
+     */
     private void fireShot(ObjectInCellEvent event){
         for (ITankEventListener listener : _listeners){
             listener.onTankShot(event);
         }
     }
 
+    /**
+     * Сообщение о пропуске хода
+     * @param event событие с информацией о танке
+     */
     private void fireSkip(ObjectInCellEvent event){
         for (ITankEventListener listener : _listeners){
             listener.onTankSkipStep(event);
         }
     }
 
+    /**
+     * Слушатель снаряда
+     */
     private class BulletListener implements IObjectInCellEventListener{
 
         @Override

@@ -17,13 +17,26 @@ public class Field {
 
     /* -------------------- Ячейки ------------------- */
 
+    /**
+     * Ячейки из которых состоит поле
+     */
     private final ArrayList<Cell> _cells = new ArrayList<>();
 
+    /**
+     * Получить ячейку по заданной позиции
+     * @param position позиция ячейки
+     * @return ячейка с заданной позиции, null если такой ячейки нет
+     */
     public Cell getCell(Position position){
         return _cells.stream().
                 filter(cell -> cell.getPosition().equals(position)).findAny().orElse(null);
     }
 
+    /**
+     * Создание ячеек и формирование из них поля
+     * @param width длина поля
+     * @param height высота поля
+     */
     private void createCells(int width, int height){
         for (int yCoordinate = 0; yCoordinate < height; yCoordinate++){
             for (int xCoordinate = 0; xCoordinate < width; xCoordinate++){
@@ -47,6 +60,10 @@ public class Field {
 
     /* ----------------- Объекты на поле --------------------- */
 
+    /**
+     * Задать объектам на поле указанного слушателя
+     * @param listener слушатель объектов на поле
+     */
     void addObjectInCellListener(IObjectInCellEventListener listener){
         for (Cell cell : _cells){
             for (ObjectInCell object : cell.getObjects()){
@@ -57,6 +74,10 @@ public class Field {
         }
     }
 
+    /**
+     * Получить все танк, находящиеся на поле
+     * @return список танков
+     */
     public ArrayList<Tank> getTanks(){
         ArrayList<Tank> tanks = new ArrayList<>();
         for (Cell cell : _cells){

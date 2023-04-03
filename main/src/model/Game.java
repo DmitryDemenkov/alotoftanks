@@ -28,8 +28,14 @@ public class Game {
 
     /* ----------------- Игровое поле ----------------- */
 
+    /**
+     * Игровое поле
+     */
     private final Field _field;
 
+    /**
+     * Запуск игры
+     */
     public void start() {
         ArrayList<Tank> tanks = _field.getTanks();
         TankListener tankListener = new TankListener();
@@ -44,26 +50,43 @@ public class Game {
 
     /* ---------------- Танки ----------------- */
 
+    /**
+     * Текущий активный танк, которым можно управлять
+     */
     private Tank _activeTank = null;
 
     public Tank activeTank() {
         return _activeTank;
     }
 
+    /**
+     * Танк - победитель, определенный после окончания игры
+     */
     private Tank _winner = null;
 
     public Tank winner() {
         return _winner;
     }
 
-    private Tank getOtherTank(Tank tank){
+    /**
+     * Получить танк-противник, для данного танка
+     * @param tank танк, для которого нужно определить противника
+     * @return танк-противник
+     */
+    private Tank getEnemyTank(Tank tank){
         return _field.getTanks().stream().filter(t -> t != tank).findAny().orElse(null);
     }
 
     /* ----------------- Игровой цикл ------------ */
 
+    /**
+     * События требующие обработки в игровом цикле
+     */
     private final Queue<ObjectInCellEvent> _activeEvents = new ArrayDeque<>();
 
+    /**
+     * Игровой цикл
+     */
     private void gameLoop(){
         int eventsCount = _activeEvents.size();
         while (eventsCount > 0){
@@ -77,6 +100,9 @@ public class Game {
         }
     }
 
+    /**
+     * Ожидание отрисовки ереданных событий
+     */
     private void waitRendering() {
         try {
             long sleepTime = 500L;
@@ -86,6 +112,10 @@ public class Game {
         }
     }
 
+    /**
+     * Определить текущее состояние игры
+     * @return текущее состояние
+     */
     private State checkState(){
         ArrayList<Tank> tanks = _field.getTanks();
 
@@ -93,7 +123,7 @@ public class Game {
             Tank tank = tanks.get(i);
             Headquarters headquarters = tank.getHeadquarters();
             if (tank.getHealth() == 0 || headquarters.getCell() == null){
-                _winner = getOtherTank(tank);
+                _winner = getEnemyTank(tank);
             }
         }
 
@@ -106,6 +136,9 @@ public class Game {
 
     /* --------------- Игровые слушатели ---------------- */
 
+    /**
+     * Слушатели игровых событий
+     */
     private final Set<IGameEventListener> _listeners = new HashSet<>();
 
     public void addListener(IGameEventListener listener){
@@ -114,12 +147,20 @@ public class Game {
 
     /* ---------------- События -------------------- */
 
+    /**
+     * Сообщить о том, что объект на поле изменился
+     * @param event событие, содержащий информацию об объекте
+     */
     private void fireObjectChanged(ObjectInCellEvent event){
         for (IGameEventListener listener : _listeners){
             listener.onObjectChanged(event);
         }
     }
 
+    /**
+     * Сообщить о том что состояние игры изиенились
+     * @param state новое состояние игры
+     */
     private void fireGameStateGanged(State state){
         for (IGameEventListener listener : _listeners){
             listener.onGameStateChanged(state);
@@ -160,7 +201,7 @@ public class Game {
             activeTank().setActive(false);
             fireObjectChanged(event);
 
-            _activeTank = getOtherTank(activeTank());
+            _activeTank = getEnemyTank(activeTank());
             activeTank().setActive(true);
 
             fireGameStateGanged(State.GAME_IS_ON);
@@ -174,7 +215,7 @@ public class Game {
             gameLoop();
             State state = checkState();
             if (state == State.GAME_IS_ON){
-                _activeTank = getOtherTank(activeTank());
+                _activeTank = getEnemyTank(activeTank());
                 activeTank().setActive(true);
             }
             fireGameStateGanged(state);
@@ -187,7 +228,7 @@ public class Game {
             }
 
             activeTank().setActive(false);
-            _activeTank = getOtherTank(activeTank());
+            _activeTank = getEnemyTank(activeTank());
             activeTank().setActive(true);
 
             fireGameStateGanged(State.GAME_IS_ON);
