@@ -16,7 +16,7 @@ public class WaterTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithTank(){
+    public void canFaceWith_collisionWithTank(){
         Tank tank = new Tank();
 
         boolean result = water.canFaceWith(tank);
@@ -25,7 +25,7 @@ public class WaterTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithObstacle(){
+    public void canFaceWith_collisionWithObstacle(){
         Obstacle obstacle = new Wall();
 
         boolean result = water.canFaceWith(obstacle);
@@ -34,14 +34,14 @@ public class WaterTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithSameObject(){
+    public void canFaceWith_collisionWithSameObject(){
         boolean result = water.canFaceWith(water);
 
         Assertions.assertFalse(result);
     }
 
     @Test
-    public void canHaveCollision_collisionWithBullet(){
+    public void canFaceWith_collisionWithBullet(){
         Bullet bullet = new BulletForTest();
 
         boolean result = water.canFaceWith(bullet);
@@ -50,7 +50,7 @@ public class WaterTest {
     }
 
     @Test
-    public void onCollision_collisionWithTank(){
+    public void faceWith_collisionWithTank(){
         Tank tank = new Tank();
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
@@ -58,7 +58,7 @@ public class WaterTest {
     }
 
     @Test
-    public void onCollision_collisionWithObstacle(){
+    public void faceWith_collisionWithObstacle(){
         Obstacle wall = new Wall();
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
@@ -66,7 +66,7 @@ public class WaterTest {
     }
 
     @Test
-    public void onCollision_collisionWithBullet(){
+    public void faceWith_collisionWithBullet(){
         Bullet bullet = new BulletForTest();
         ObjectInCellEvent[] actualEvents = {null};
 

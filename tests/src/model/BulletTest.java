@@ -32,7 +32,7 @@ public class BulletTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithTank(){
+    public void canFaceWith_collisionWithTank(){
         Tank tank = new Tank();
 
         boolean result = bullet.canFaceWith(tank);
@@ -41,7 +41,7 @@ public class BulletTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithWall(){
+    public void canFaceWith_collisionWithWall(){
         Obstacle wall = new Wall();
 
         boolean result = bullet.canFaceWith(wall);
@@ -50,7 +50,7 @@ public class BulletTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithWater(){
+    public void canFaceWith_collisionWithWater(){
         Obstacle water = new Water();
 
         boolean result = bullet.canFaceWith(water);
@@ -59,7 +59,7 @@ public class BulletTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithBullet(){
+    public void canFaceWith_collisionWithBullet(){
         Bullet otherBullet = new BulletForTest();
 
         boolean result = bullet.canFaceWith(otherBullet);
@@ -68,14 +68,14 @@ public class BulletTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithSameObject(){
+    public void canFaceWith_collisionWithSameObject(){
         boolean result = bullet.canFaceWith(bullet);
 
         Assertions.assertFalse(result);
     }
 
     @Test
-    public void onCollision_collisionWithTank(){
+    public void faceWith_collisionWithTank(){
         ObjectInCellEvent[] actualEvents = {null};
 
         Tank tank = new Tank();
@@ -95,7 +95,7 @@ public class BulletTest {
     }
 
     @Test
-    public void onCollision_collisionWithWall(){
+    public void faceWith_collisionWithWall(){
         ObjectInCellEvent[] actualEvents = {null};
 
         Wall wall = new Wall();
@@ -115,7 +115,7 @@ public class BulletTest {
     }
 
     @Test
-    public void onCollision_collisionWithWater(){
+    public void faceWith_collisionWithWater(){
         ObjectInCellEvent[] actualEvents = {null};
 
         Water water = new Water();
@@ -135,7 +135,7 @@ public class BulletTest {
     }
 
     @Test
-    public void onCollision_collisionWithHeadquarters(){
+    public void faceWith_collisionWithHeadquarters(){
         ObjectInCellEvent[] actualEvents = {null};
 
         Headquarters headquarters = new Headquarters();

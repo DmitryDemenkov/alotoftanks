@@ -26,7 +26,7 @@ public class TankTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithObstacle(){
+    public void canFaceWith_collisionWithObstacle(){
         Obstacle obstacle = new Wall();
 
         boolean result = tank.canFaceWith(obstacle);
@@ -35,14 +35,14 @@ public class TankTest {
     }
 
     @Test
-    public void canHaveCollision_collisionWithSameObject(){
+    public void canFaceWith_collisionWithSameObject(){
         boolean result = tank.canFaceWith(tank);
 
         Assertions.assertFalse(result);
     }
 
     @Test
-    public void canHaveCollision_collisionWithBullet(){
+    public void canFaceWith_collisionWithBullet(){
         Bullet bullet = new BulletForTest();
 
         boolean result = tank.canFaceWith(bullet);
@@ -51,7 +51,7 @@ public class TankTest {
     }
 
     @Test
-    public void onCollision_collisionWithTank(){
+    public void canFaceWith_collisionWithTank(){
         Tank otherTank = new Tank();
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
@@ -59,7 +59,7 @@ public class TankTest {
     }
 
     @Test
-    public void onCollision_collisionWithObstacle(){
+    public void faceWith_collisionWithObstacle(){
         Obstacle wall = new Wall();
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
@@ -67,7 +67,7 @@ public class TankTest {
     }
 
     @Test
-    public void onCollision_collisionWithBullet() {
+    public void faceWith_collisionWithBullet() {
         Bullet bullet = new BulletForTest();
         ObjectInCellEvent[] actualEvents = {null};
 
