@@ -20,7 +20,7 @@ public class Tank extends MovableObject implements Damageable {
      */
     private boolean _isActive = true;
 
-    boolean isActive(){
+    public boolean isActive(){
         return _isActive;
     }
 
