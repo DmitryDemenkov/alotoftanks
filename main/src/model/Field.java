@@ -10,7 +10,14 @@ import java.util.ArrayList;
  */
 public class Field {
 
+    private final Size _size;
+
+    public Size getSize(){
+        return _size;
+    }
+
     public Field(Environment environment){
+        _size = environment.fieldSize();
         createCells(environment.fieldSize().width(), environment.fieldSize().height());
         environment.fillField(this);
     }
