@@ -33,6 +33,10 @@ public class Game {
      */
     private final Field _field;
 
+    public Field getField(){
+        return _field;
+    }
+
     /**
      * Запуск игры
      */
@@ -74,7 +78,7 @@ public class Game {
      * @return танк-противник
      */
     private Tank getEnemyTank(Tank tank){
-        return _field.getTanks().stream().filter(t -> t != tank).findAny().orElse(null);
+        return _field.getTanks().stream().filter(t -> t != tank).findAny().orElse(tank);
     }
 
     /* ----------------- Игровой цикл ------------ */
@@ -84,19 +88,27 @@ public class Game {
      */
     private final Queue<ObjectInCellEvent> _activeEvents = new ArrayDeque<>();
 
+    private final Timer _timer = new Timer();
+
     /**
      * Игровой цикл
      */
     private void gameLoop(){
         int eventsCount = _activeEvents.size();
-        while (eventsCount > 0){
+        if (eventsCount > 0){
             for (int i = 0; i < eventsCount; i++){
                 ObjectInCellEvent event = _activeEvents.remove();
                 event.getObject().update();
                 fireObjectChanged(event);
             }
             waitRendering();
-            eventsCount = _activeEvents.size();
+        } else {
+            State state = checkState();
+            if (state == State.GAME_IS_ON){
+                _activeTank = getEnemyTank(activeTank());
+                activeTank().setActive(true);
+            }
+            fireGameStateGanged(state);
         }
     }
 
@@ -104,12 +116,12 @@ public class Game {
      * Ожидание отрисовки ереданных событий
      */
     private void waitRendering() {
-        try {
-            long sleepTime = 500L;
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        _timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                gameLoop();
+            }
+        }, 500L);
     }
 
     /**
@@ -213,12 +225,6 @@ public class Game {
 
             _activeEvents.add(event);
             gameLoop();
-            State state = checkState();
-            if (state == State.GAME_IS_ON){
-                _activeTank = getEnemyTank(activeTank());
-                activeTank().setActive(true);
-            }
-            fireGameStateGanged(state);
         }
 
         @Override

@@ -29,6 +29,15 @@ public class GameTest {
         }
     }
 
+    private void waitGame(){
+        try {
+            long sleepTime = 2000L;
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @BeforeEach
     public void testConfiguration(){
         gameStates.clear();
@@ -126,6 +135,7 @@ public class GameTest {
 
         tank1.rotate(Direction.SOUTH);
         tank1.shoot();
+        waitGame();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
         expectedObjectEvents.add(new ObjectInCellEvent(tank1, ObjectInCellEvent.EventType.MOVING));
@@ -161,6 +171,7 @@ public class GameTest {
         Tank activeTank = game.activeTank();
         activeTank.rotate(Direction.EAST);
         activeTank.shoot();
+        waitGame();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
         expectedObjectEvents.add(new ObjectInCellEvent(activeTank, ObjectInCellEvent.EventType.MOVING));
