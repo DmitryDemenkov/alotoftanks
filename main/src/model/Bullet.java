@@ -12,6 +12,10 @@ public class Bullet extends MovableObject{
      */
     private boolean _isDestroying = false;
 
+    public boolean isDetonating(){
+        return _isDestroying;
+    }
+
     public Bullet(Direction direction, Cell startCell){
         setDirection(direction);
         setCell(startCell);
