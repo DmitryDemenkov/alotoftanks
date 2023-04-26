@@ -8,12 +8,19 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Представление движущегося объекта
+ */
 public abstract class MovableObjectWidget extends ObjectInCellWidget{
 
     public MovableObjectWidget(MovableObject object) {
         super(object);
     }
 
+    /**
+     * Переместить виджет в указанный виджет ячейки
+     * @param cellWidget виджет ячейки, куда нужно переместиься
+     */
     protected void moveTo(CellWidget cellWidget){
         if (getCellWidget() != null) {
             getCellWidget().setActive(false);
@@ -29,6 +36,11 @@ public abstract class MovableObjectWidget extends ObjectInCellWidget{
         return getImageByDirection(((MovableObject)getObject()).getDirection());
     }
 
+    /**
+     * Получить изображение объект, соответсвующее направлению движения
+     * @param direction еаправление движения объекта
+     * @return изображение объекта
+     */
     private BufferedImage getImageByDirection(Direction direction){
         Map<Direction, Double> directionToAngles = new HashMap<>();
         directionToAngles.put(Direction.NORTH, 0.0);

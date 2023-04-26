@@ -5,6 +5,9 @@ import model.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Пул виджетов, расположенных на поле
+ */
 public class WidgetPool {
 
     private final Map<ObjectInCell, ObjectInCellWidget> _objectWidgets = new HashMap<>();

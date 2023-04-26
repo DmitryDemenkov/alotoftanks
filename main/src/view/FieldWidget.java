@@ -8,7 +8,14 @@ import model.Tank;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Представление поля
+ */
 public class FieldWidget extends JPanel {
+
+    /**
+     * Модель поля
+     */
     private final Field _field;
 
     public FieldWidget(Field field, WidgetPool pool){
@@ -19,6 +26,10 @@ public class FieldWidget extends JPanel {
         initializePlayers(pool);
     }
 
+    /**
+     * Заполнение поля
+     * @param pool пул виджетов, содержащий виджеты ячейки
+     */
     private void fill(WidgetPool pool){
         for (int y = 0; y < _field.getSize().height(); y++){
             for (int x = 0; x < _field.getSize().width(); x++){
@@ -28,6 +39,10 @@ public class FieldWidget extends JPanel {
         }
     }
 
+    /**
+     * Присвоить игрокам их цвета
+     * @param pool, пул виджетов, содержащий виджеты танков и штабов
+     */
     private void initializePlayers(WidgetPool pool){
         Color[] colors = new Color[] {Color.BLUE, Color.ORANGE};
         for (int i = 0; i < _field.getTanks().size(); i++){

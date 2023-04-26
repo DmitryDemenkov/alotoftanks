@@ -4,6 +4,9 @@ import model.Wall;
 
 import java.io.File;
 
+/**
+ * Представление стены
+ */
 public class WallWidget extends ObjectInCellWidget{
 
     public WallWidget(Wall wall){
