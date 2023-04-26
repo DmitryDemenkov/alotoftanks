@@ -11,12 +11,24 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Представление игры
+ */
 public class GamePanel extends JFrame {
 
+    /**
+     * Пул виджетов, содержащий виджеты ячеек и объектов на поле
+     */
     private final WidgetPool _pool = new WidgetPool();
 
+    /**
+     * Панели игроков
+     */
     private final List<PlayerPanel> _playerPanels = new ArrayList<>();
 
+    /**
+     * Модель игры
+     */
     private Game _game;
 
     public GamePanel(){
@@ -28,6 +40,9 @@ public class GamePanel extends JFrame {
         start();
     }
 
+    /**
+     * Создать игру и ее представление
+     */
     private void create(){
         _game = new Game(new SimpleEnvironment());
         FieldWidget fieldWidget = new FieldWidget(_game.getField(), _pool);
@@ -49,16 +64,25 @@ public class GamePanel extends JFrame {
         revalidate();
     }
 
+    /**
+     * Запустить игру
+     */
     private void start(){
         _game.start();
         ((TankWidget) _pool.getWidget(_game.activeTank())).setActive(true);
     }
 
+    /**
+     * Перезапустить игру
+     */
     private void restart(){
         create();
         start();
     }
 
+    /**
+     * Слушатель игровых событий
+     */
     private class GameListener implements IGameEventListener {
 
         @Override

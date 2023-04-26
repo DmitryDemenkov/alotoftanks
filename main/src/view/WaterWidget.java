@@ -4,6 +4,9 @@ import model.Water;
 
 import java.io.File;
 
+/**
+ * Представление воды
+ */
 public class WaterWidget extends ObjectInCellWidget{
 
     public WaterWidget(Water water){

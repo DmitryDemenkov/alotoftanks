@@ -10,12 +10,24 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Представление панели игрока
+ */
 public class PlayerPanel extends JPanel {
 
+    /**
+     * Танк игрока
+     */
     private final Tank _tank;
 
+    /**
+     * Максимальное кол-во жизней игрока
+     */
     private final int _maxHeath;
 
+    /**
+     * Цвет игрока
+     */
     private final Color _color;
 
     public PlayerPanel(TankWidget tankWidget){
@@ -30,6 +42,9 @@ public class PlayerPanel extends JPanel {
         update();
     }
 
+    /**
+     * Обновить информацию об игроке
+     */
     public void update(){
         removeAll();
         add(getFlagBar());
@@ -39,6 +54,10 @@ public class PlayerPanel extends JPanel {
         revalidate();
     }
 
+    /**
+     * Получить панель с жизнями игрока
+     * @return панель с жизнями игрока
+     */
     private JPanel getHeathBar(){
         JPanel heathBar = new JPanel();
         heathBar.setLayout(new GridLayout(_maxHeath, 1));
@@ -52,12 +71,21 @@ public class PlayerPanel extends JPanel {
         return heathBar;
     }
 
+    /**
+     * Получить изображение сердца
+     * @param isActive активное сердце - красное, неактивное - серое
+     * @return изображения сердца
+     */
     private BufferedImage getHeartImage(boolean isActive){
         String path = isActive ? "resources/red_heart.png" : "resources/grey_heart.png";
 
         return getImage(new File(path), new Dimension(50, 50));
     }
 
+    /**
+     * Получить панель с флагом игрока
+     * @return панель с флагом
+     */
     private JPanel getFlagBar(){
         JPanel flagBar = new JPanel();
         flagBar.setLayout(new GridBagLayout());
@@ -66,12 +94,20 @@ public class PlayerPanel extends JPanel {
         return flagBar;
     }
 
+    /**
+     * Получить изображение флага игрока, соотыетсвующее его цвету
+     * @return изображение флага
+     */
     private BufferedImage getFlagImage(){
         String path = _color == Color.BLUE ? "resources/blue_flag.png" : "resources/orange_flag.png";
 
         return getImage(new File(path), new Dimension(100, 100));
     }
 
+    /**
+     * Получить панель перезарядки орудия
+     * @return панель перезарядки
+     */
     private JPanel getReloadGunBar(){
         JPanel reloadPanel = new JPanel();
         reloadPanel.setLayout(new GridBagLayout());
@@ -94,12 +130,23 @@ public class PlayerPanel extends JPanel {
         return reloadPanel;
     }
 
+    /**
+     * Получить изображение перезарядки орудия
+     * @param isActive активность орудия
+     * @return изображение перезарядки
+     */
     private BufferedImage getReloadImage(boolean isActive){
         String path = isActive ? "resources/bullet.png" : "resources/grey_bullet.png";
 
         return getImage(new File(path), new Dimension(50, 50));
     }
 
+    /**
+     * Получить изображение из файла
+     * @param file файл с изображением
+     * @param dimension размер изображения
+     * @return изображение из файла
+     */
     private BufferedImage getImage(File file, Dimension dimension){
         BufferedImage image = null;
         try {

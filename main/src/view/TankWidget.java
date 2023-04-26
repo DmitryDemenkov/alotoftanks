@@ -9,6 +9,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Прежставление танка
+ */
 public class TankWidget extends MovableObjectWidget {
 
     public TankWidget(Tank tank){
@@ -16,10 +19,18 @@ public class TankWidget extends MovableObjectWidget {
         addKeyListener(new KeyListener());
     }
 
+    /**
+     * Получить модель танка
+     * @return модель танка
+     */
     private Tank getTank(){
         return (Tank) getObject();
     }
 
+    /**
+     * Установить активность виджета
+     * @param active активность виджета
+     */
     public void setActive(boolean active){
         setFocusable(active);
         getCellWidget().setActive(active);
@@ -27,16 +38,30 @@ public class TankWidget extends MovableObjectWidget {
         repaint();
     }
 
+    /**
+     * Цвет танка
+     */
     private Color _color;
 
+    /**
+     * Задать цвет
+     * @param color задаваемый цвет
+     */
     void setColor(Color color){
         _color = color;
     }
 
+    /**
+     * Получить цвет танка
+     * @return цвет танка
+     */
     Color getColor(){
         return _color;
     }
 
+    /**
+     * Отрисовать получение урона
+     */
     @Override
     public void getDamage(){
         if (getTank().getHealth() <= 0){
@@ -54,11 +79,19 @@ public class TankWidget extends MovableObjectWidget {
         return getImageFileByColor(getColor());
     }
 
+    /**
+     * Получить файл с изображением танка, соответствующее его цвету
+     * @param color цвет танка
+     * @return файл с изоборажением танка
+     */
     private File getImageFileByColor(Color color){
         String path = color == Color.BLUE ? "resources/blue_tank.png" : "resources/orange_tank.png";
         return new File(path);
     }
 
+    /**
+     * Слушатель пользовательского ввода
+     */
     private class KeyListener implements java.awt.event.KeyListener{
 
         @Override

@@ -5,6 +5,9 @@ import model.Bullet;
 import java.awt.*;
 import java.io.File;
 
+/**
+* Представление снаряда
+*/
 public class BulletWidget extends MovableObjectWidget {
 
     public BulletWidget(Bullet bullet){
