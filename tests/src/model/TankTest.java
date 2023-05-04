@@ -6,9 +6,35 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 public class TankTest {
 
     private Tank tank;
+
+    private class TankListener implements ITankEventListener{
+        @Override
+        public void onTankMoved(ObjectInCellEvent event) {
+            throw new RuntimeException("Unexpected event");
+        }
+
+        @Override
+        public void onTankShot(ObjectInCellEvent event) {
+            throw new RuntimeException("Unexpected event");
+        }
+
+        @Override
+        public void onTankSkipStep(ObjectInCellEvent event) {
+            throw new RuntimeException("Unexpected event");
+        }
+
+        @Override
+        public void onObjectInCellAction(ObjectInCellEvent event) {
+            events.add(event);
+        }
+    }
+
+    private final ArrayList<ObjectInCellEvent> events = new ArrayList<>();
 
     @BeforeEach
     public void testConfiguration(){
@@ -69,38 +95,19 @@ public class TankTest {
     @Test
     public void faceWith_collisionWithBullet() {
         Bullet bullet = new BulletForTest();
-        ObjectInCellEvent[] actualEvents = {null};
 
-        tank.addListener(new ITankEventListener() {
-            @Override
-            public void onTankMoved(ObjectInCellEvent event) {
-                throw new RuntimeException("Unexpected event");
-            }
-
-            @Override
-            public void onTankShot(ObjectInCellEvent event) {
-                throw new RuntimeException("Unexpected event");
-            }
-
-            @Override
-            public void onTankSkipStep(ObjectInCellEvent event) {
-                throw new RuntimeException("Unexpected event");
-            }
-
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(tank, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DAMAGED, event.getType());
-                actualEvents[0] = event;
-            }
-        });
-
-        ObjectInCellEvent expectedEvent = new ObjectInCellEvent(tank, ObjectInCellEvent.EventType.DAMAGED);
+        tank.addListener(new TankListener());
 
         tank.faceWith(bullet);
 
-        Assertions.assertNotNull(actualEvents[0]);
-        Assertions.assertSame(expectedEvent.getObject(), actualEvents[0].getObject());
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(tank, ObjectInCellEvent.EventType.NEED_UPDATE));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
     }
 
     @Test
@@ -126,7 +133,7 @@ public class TankTest {
             @Override
             public void onObjectInCellAction(ObjectInCellEvent event) {
                 Assertions.assertSame(tank, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVING, event.getType());
+                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVED, event.getType());
                 actualEvents[0] = event;
             }
         });
@@ -180,7 +187,7 @@ public class TankTest {
             @Override
             public void onTankMoved(ObjectInCellEvent event) {
                 Assertions.assertSame(tank, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVING, event.getType());
+                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVED, event.getType());
                 Assertions.assertSame(targetCell, tank.getCell());
                 actualEvents[0] = event;
             }
@@ -299,7 +306,7 @@ public class TankTest {
             @Override
             public void onTankShot(ObjectInCellEvent event) {
                 Assertions.assertEquals(Bullet.class, event.getObject().getClass());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVING, event.getType());
+                Assertions.assertEquals(ObjectInCellEvent.EventType.NEED_UPDATE, event.getType());
                 actualEvents[0] = event;
             }
 
@@ -390,42 +397,24 @@ public class TankTest {
     public void update_getDamage() {
         Cell cell = new Cell(new Position(0, 0));
         Bullet bullet = new BulletForTest();
-        ObjectInCellEvent[] actualEvents = {null};
 
-        tank.addListener(new ITankEventListener() {
-            @Override
-            public void onTankMoved(ObjectInCellEvent event) {
-                throw new RuntimeException("Unexpected event");
-            }
+        tank.addListener(new TankListener());
 
-            @Override
-            public void onTankShot(ObjectInCellEvent event) {
-                throw new RuntimeException("Unexpected event");
-            }
-
-            @Override
-            public void onTankSkipStep(ObjectInCellEvent event) {
-                throw new RuntimeException("Unexpected event");
-            }
-
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(tank, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DAMAGED, event.getType());
-                Assertions.assertSame(cell, tank.getCell());
-                actualEvents[0] = event;
-            }
-        });
-
-        ObjectInCellEvent expectedEvent = new ObjectInCellEvent(tank, ObjectInCellEvent.EventType.DAMAGED);
         int expectedHealth = tank.getHealth() - 1;
 
         cell.addObject(tank);
         cell.addObject(bullet);
         tank.update();
 
-        Assertions.assertNotNull(actualEvents[0]);
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(tank, ObjectInCellEvent.EventType.NEED_UPDATE));
+        expectedEvents.add(new ObjectInCellEvent(tank, ObjectInCellEvent.EventType.DAMAGED));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
         Assertions.assertEquals(expectedHealth, tank.getHealth());
-        Assertions.assertSame(expectedEvent.getObject(), actualEvents[0].getObject());
     }
 }

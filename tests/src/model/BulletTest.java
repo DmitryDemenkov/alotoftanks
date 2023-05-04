@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class BulletTest {
 
@@ -15,12 +14,23 @@ public class BulletTest {
     Cell startCell;
     Cell targetCell;
 
+    private final ArrayList<ObjectInCellEvent> events = new ArrayList<>();
+
+    private class BulletListener implements IObjectInCellEventListener{
+
+        @Override
+        public void onObjectInCellAction(ObjectInCellEvent event) {
+            events.add(event);
+        }
+    }
+
     @BeforeEach
     public void createTestConfiguration(){
         startCell = new Cell(new Position(0, 0));
         targetCell = new Cell(new Position(0, 1));
         startCell.setNeighbour(targetCell);
         bullet = new Bullet(Direction.SOUTH, startCell);
+        events.clear();
     }
 
     @Test
@@ -76,167 +86,118 @@ public class BulletTest {
 
     @Test
     public void faceWith_collisionWithTank(){
-        ObjectInCellEvent[] actualEvents = {null};
-
         Tank tank = new Tank();
 
-        bullet.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DESTROYING, event.getType());
-                actualEvents[0] = event;
-            }
-        });
+        bullet.addListener(new BulletListener());
 
         bullet.faceWith(tank);
 
-        Assertions.assertNotNull(actualEvents[0]);
+        Assertions.assertTrue(bullet.isDetonating());
     }
 
     @Test
     public void faceWith_collisionWithWall(){
-        ObjectInCellEvent[] actualEvents = {null};
-
         Wall wall = new Wall();
 
-        bullet.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DESTROYING, event.getType());
-                actualEvents[0] = event;
-            }
-        });
+        bullet.addListener(new BulletListener());
 
         bullet.faceWith(wall);
 
-        Assertions.assertNotNull(actualEvents[0]);
+        Assertions.assertTrue(bullet.isDetonating());
     }
 
     @Test
     public void faceWith_collisionWithWater(){
-        ObjectInCellEvent[] actualEvents = {null};
-
         Water water = new Water();
 
-        bullet.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVING, event.getType());
-                actualEvents[0] = event;
-            }
-        });
+        bullet.addListener(new BulletListener());
 
         bullet.faceWith(water);
 
-        Assertions.assertNull(actualEvents[0]);
+        Assertions.assertFalse(bullet.isDetonating());
     }
 
     @Test
     public void faceWith_collisionWithHeadquarters(){
-        ObjectInCellEvent[] actualEvents = {null};
-
         Headquarters headquarters = new Headquarters();
 
-        bullet.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DESTROYING, event.getType());
-                actualEvents[0] = event;
-            }
-        });
+        bullet.addListener(new BulletListener());
 
         bullet.faceWith(headquarters);
 
-        Assertions.assertNotNull(actualEvents[0]);
+        Assertions.assertTrue(bullet.isDetonating());
     }
 
     @Test
     public void move_movingInEmptyCell(){
-        ObjectInCellEvent[] actualEvents = {null};
-
-        bullet.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVING, event.getType());
-                Assertions.assertSame(targetCell, bullet.getCell());
-                actualEvents[0] = event;
-            }
-        });
+        bullet.addListener(new BulletListener());
 
         bullet.move();
 
-        Assertions.assertNotNull(actualEvents[0]);
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.MOVED));
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.NEED_UPDATE));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
     }
 
     @Test
     public void move_movingInCellWithWall(){
-        List<ObjectInCellEvent> events = new ArrayList<>();
-
         targetCell.addObject(new Wall());
 
-        bullet.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertSame(targetCell, bullet.getCell());
-                events.add(event);
-            }
-        });
+        bullet.addListener(new BulletListener());
 
         bullet.move();
 
-        List<ObjectInCellEvent> expectedEvents = new ArrayList<>();
-        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.DESTROYING));
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.MOVED));
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.NEED_UPDATE));
 
         Assertions.assertEquals(expectedEvents.size(), events.size());
-        for (int i = 0; i < expectedEvents.size(); i++){
+        for(int i = 0; i < events.size(); i++){
             Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
         }
+        Assertions.assertTrue(bullet.isDetonating());
     }
 
     @Test void update_moving(){
-        ObjectInCellEvent[] actualEvents = {null};
-
-        bullet.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.MOVING, event.getType());
-                Assertions.assertSame(targetCell, bullet.getCell());
-                actualEvents[0] = event;
-            }
-        });
+        bullet.addListener(new BulletListener());
 
         bullet.update();
 
-        Assertions.assertNotNull(actualEvents[0]);
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.MOVED));
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.NEED_UPDATE));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
     }
 
     @Test
     public void update_detonating(){
-        ObjectInCellEvent[] actualEvents = {null};
-
         targetCell.addObject(new Wall());
 
-        bullet.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(bullet, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DESTROYING, event.getType());
-                Assertions.assertSame(targetCell, bullet.getCell());
-                actualEvents[0] = event;
-            }
-        });
+        bullet.addListener(new BulletListener());
 
         targetCell.addObject(bullet);
         bullet.update();
 
-        Assertions.assertNotNull(actualEvents[0]);
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.DESTROYED));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
         Assertions.assertNull(bullet.getCell());
     }
 }

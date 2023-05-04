@@ -8,8 +8,9 @@ import model.ObjectInCell;
 public class ObjectInCellEvent {
 
     public enum EventType{
-        DESTROYING,
-        MOVING,
+        NEED_UPDATE,
+        DESTROYED,
+        MOVED,
         DAMAGED
     }
 

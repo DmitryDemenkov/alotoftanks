@@ -88,12 +88,12 @@ public class GamePanel extends JFrame {
         @Override
         public void onObjectChanged(ObjectInCellEvent event) {
             ObjectInCellWidget widget = _pool.getWidget(event.getObject());
-            if (event.getType() == ObjectInCellEvent.EventType.MOVING && widget instanceof MovableObjectWidget movableWidget){
+            if (event.getType() == ObjectInCellEvent.EventType.MOVED && widget instanceof MovableObjectWidget movableWidget){
                 CellWidget cellWidget = event.getObject().getCell() != null ? _pool.getWidget(event.getObject().getCell()) : null;
                 movableWidget.moveTo(cellWidget);
             } else{
                 widget.getDamage();
-                if (event.getType() == ObjectInCellEvent.EventType.DESTROYING){
+                if (event.getType() == ObjectInCellEvent.EventType.DESTROYED){
                     _pool.removeWidget(event.getObject());
                 }
             }

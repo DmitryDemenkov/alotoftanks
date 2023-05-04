@@ -43,7 +43,7 @@ public class Headquarters extends ObjectInCell implements Damageable {
 
         if (object instanceof Bullet){
             _isDestroying = true;
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYING));
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
         }
     }
 
@@ -51,6 +51,7 @@ public class Headquarters extends ObjectInCell implements Damageable {
     void update() {
         if (_isDestroying){
             getCell().takeObject(this);
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));
         }
     }
 }

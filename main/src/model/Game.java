@@ -99,7 +99,6 @@ public class Game {
             for (int i = 0; i < eventsCount; i++){
                 ObjectInCellEvent event = _activeEvents.remove();
                 event.getObject().update();
-                fireObjectChanged(event);
             }
             waitRendering();
         } else {
@@ -186,7 +185,11 @@ public class Game {
 
         @Override
         public void onObjectInCellAction(ObjectInCellEvent event) {
-            _activeEvents.add(event);
+            if (event.getType() == ObjectInCellEvent.EventType.NEED_UPDATE) {
+                _activeEvents.add(event);
+            } else {
+                fireObjectChanged(event);
+            }
         }
     }
 
@@ -197,10 +200,10 @@ public class Game {
 
         @Override
         public void onObjectInCellAction(ObjectInCellEvent event) {
-            if (event.getObject() == activeTank() && event.getType() == ObjectInCellEvent.EventType.MOVING){
-                fireObjectChanged(event);
-            } else {
+            if (event.getType() == ObjectInCellEvent.EventType.NEED_UPDATE) {
                 _activeEvents.add(event);
+            } else {
+                fireObjectChanged(event);
             }
         }
 

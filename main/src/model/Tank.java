@@ -69,7 +69,7 @@ public class Tank extends MovableObject implements Damageable {
         }
 
         setDirection(direction);
-        fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
+        fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
     }
 
     /**
@@ -100,7 +100,7 @@ public class Tank extends MovableObject implements Damageable {
 
         Bullet bullet = new Bullet(getDirection(), getCell());
         bullet.addListener(new BulletListener());
-        fireShot(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.MOVING));
+        fireShot(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.NEED_UPDATE));
         _currentReloadTime = RELOAD_TIME;
         return true;
     }
@@ -114,7 +114,7 @@ public class Tank extends MovableObject implements Damageable {
         }
 
         _currentReloadTime -= 1;
-        fireSkip(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
+        fireSkip(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
     }
 
     @Override
@@ -126,7 +126,7 @@ public class Tank extends MovableObject implements Damageable {
         boolean isMoved = super.move();
         if (isMoved){
             _currentReloadTime -= 1;
-            fireMoved(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
+            fireMoved(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
         }
         return isMoved;
     }
@@ -153,7 +153,7 @@ public class Tank extends MovableObject implements Damageable {
 
         if (object instanceof Bullet){
             _isDamaged = true;
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DAMAGED));
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
         }
     }
 
@@ -162,6 +162,7 @@ public class Tank extends MovableObject implements Damageable {
         if (_isDamaged && getHealth() > 0){
             _health = getHealth() - 1;
             _isDamaged = false;
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DAMAGED));
         }
     }
 

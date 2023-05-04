@@ -32,14 +32,13 @@ public class Bullet extends MovableObject{
 
         if (object instanceof Damageable){
             _isDestroying = true;
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYING));
         }
     }
 
     @Override
     void update() {
         if (_isDestroying){
-            getCell().takeObject(this);
+            destroy();
         } else {
             move();
         }
@@ -48,11 +47,17 @@ public class Bullet extends MovableObject{
     @Override
     public boolean move(){
         boolean isMoved = super.move();
-        if (!_isDestroying && isMoved){
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVING));
-        } else if (!isMoved){
-            getCell().takeObject(this);
+        if (isMoved){
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
+        } else {
+            destroy();
         }
         return isMoved;
+    }
+
+    private void destroy(){
+        getCell().takeObject(this);
+        fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));
     }
 }

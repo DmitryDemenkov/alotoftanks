@@ -18,7 +18,7 @@ public class Wall extends Obstacle implements Damageable{
 
         if (object instanceof Bullet){
             _isDestroyed = true;
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYING));
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
         }
     }
 
@@ -26,6 +26,7 @@ public class Wall extends Obstacle implements Damageable{
     void update() {
         if (_isDestroyed){
             getCell().takeObject(this);
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));
         }
     }
 }

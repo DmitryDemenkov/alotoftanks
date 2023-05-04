@@ -6,13 +6,26 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 public class WallTest {
 
     private Wall wall;
 
+    private class WallObserver implements IObjectInCellEventListener{
+
+        @Override
+        public void onObjectInCellAction(ObjectInCellEvent event) {
+            events.add(event);
+        }
+    }
+
+    private final ArrayList<ObjectInCellEvent> events = new ArrayList<>();
+
     @BeforeEach
     public void testConfiguration(){
         wall = new Wall();
+        events.clear();
     }
 
     @Test
@@ -68,50 +81,41 @@ public class WallTest {
     @Test
     public void faceWith_collisionWithBullet() {
         Bullet bullet = new BulletForTest();
-        ObjectInCellEvent[] actualEvents = {null};
 
-        wall.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(wall, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DESTROYING, event.getType());
-                actualEvents[0] = event;
-            }
-        });
-
-        ObjectInCellEvent expectedEvent = new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.DESTROYING);
+        wall.addListener(new WallObserver());
 
         wall.faceWith(bullet);
 
-        Assertions.assertNull(wall.getCell());
-        Assertions.assertNotNull(actualEvents[0]);
-        Assertions.assertSame(expectedEvent.getObject(), actualEvents[0].getObject());
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.NEED_UPDATE));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
     }
 
     @Test
     public void update_destroying() {
         Cell cell = new Cell(new Position(0, 0));
         Bullet bullet = new BulletForTest();
-        ObjectInCellEvent[] actualEvents = {null};
 
-        wall.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                Assertions.assertSame(wall, event.getObject());
-                Assertions.assertEquals(ObjectInCellEvent.EventType.DESTROYING, event.getType());
-                Assertions.assertSame(cell, wall.getCell());
-                actualEvents[0] = event;
-            }
-        });
-
-        ObjectInCellEvent expectedEvent = new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.DESTROYING);
+        wall.addListener(new WallObserver());
 
         cell.addObject(wall);
         cell.addObject(bullet);
         wall.update();
 
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.NEED_UPDATE));
+        expectedEvents.add(new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.DESTROYED));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
         Assertions.assertNull(wall.getCell());
-        Assertions.assertNotNull(actualEvents[0]);
-        Assertions.assertSame(expectedEvent.getObject(), actualEvents[0].getObject());
     }
 }
