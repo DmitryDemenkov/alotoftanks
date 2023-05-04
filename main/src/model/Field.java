@@ -74,9 +74,7 @@ public class Field {
     void addObjectInCellListener(IObjectInCellEventListener listener){
         for (Cell cell : _cells){
             for (ObjectInCell object : cell.getObjects()){
-                if (!(object instanceof Tank)){
-                    object.addListener(listener);
-                }
+                object.addListener(listener);
             }
         }
     }

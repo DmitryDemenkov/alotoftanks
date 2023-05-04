@@ -1,11 +1,7 @@
 package model;
 
 import events.IObjectInCellEventListener;
-import events.ITankEventListener;
 import events.ObjectInCellEvent;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class Tank extends MovableObject implements Damageable {
 
@@ -14,19 +10,6 @@ public class Tank extends MovableObject implements Damageable {
     }
 
     /* --------------------- Состояние танка ------------------ */
-
-    /**
-     * Интерактивность танка, true если танком можно управлять
-     */
-    private boolean _isActive = true;
-
-    public boolean isActive(){
-        return _isActive;
-    }
-
-    void setActive(boolean active){
-        _isActive = active;
-    }
 
     /**
      * Состояние танка, true если танк получает урон
@@ -60,10 +43,6 @@ public class Tank extends MovableObject implements Damageable {
      * @param direction направление поворота
      */
     public void rotate(Direction direction){
-        if (!isActive()){
-            return;
-        }
-
         if (direction == getDirection()){
             return;
         }
@@ -89,7 +68,7 @@ public class Tank extends MovableObject implements Damageable {
      * @return true если выстрел совершен успешно
      */
     public boolean shoot(){
-        if (!isActive() || getCurrentReloadTime() > 0){
+        if (getCurrentReloadTime() > 0){
             return false;
         }
 
@@ -100,7 +79,7 @@ public class Tank extends MovableObject implements Damageable {
 
         Bullet bullet = new Bullet(getDirection(), getCell());
         bullet.addListener(new BulletListener());
-        fireShot(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.NEED_UPDATE));
+        fireEvent(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.NEED_UPDATE));
         _currentReloadTime = RELOAD_TIME;
         return true;
     }
@@ -109,24 +88,15 @@ public class Tank extends MovableObject implements Damageable {
      * Пропустить ход
      */
     public void pass(){
-        if (!isActive()){
-            return;
-        }
-
         _currentReloadTime -= 1;
-        fireSkip(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
     }
 
     @Override
     public boolean move() {
-        if (!isActive()){
-            return false;
-        }
-
         boolean isMoved = super.move();
         if (isMoved){
             _currentReloadTime -= 1;
-            fireMoved(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
         }
         return isMoved;
     }
@@ -167,57 +137,6 @@ public class Tank extends MovableObject implements Damageable {
     }
 
     /* -------------------------- Слушатели и события ------------------- */
-
-    /**
-     * Слушатели танка
-     */
-    private final Set<ITankEventListener> _listeners = new HashSet<>();
-
-    @Override
-    public void addListener(IObjectInCellEventListener listener){
-        if (!(listener instanceof ITankEventListener tankListener)){
-            return;
-        }
-
-        _listeners.add(tankListener);
-    }
-
-    @Override
-    protected void fireEvent(ObjectInCellEvent event) {
-        for (ITankEventListener listener : _listeners){
-            listener.onObjectInCellAction(event);
-        }
-    }
-
-    /**
-     * Сообщить об успешном перемещении танка
-     * @param event событие с информацией о танке
-     */
-    private void fireMoved(ObjectInCellEvent event){
-        for (ITankEventListener listener : _listeners){
-            listener.onTankMoved(event);
-        }
-    }
-
-    /**
-     * Сообщить об успешном выстреле
-     * @param event событие с информацией о выпущенном снаряде
-     */
-    private void fireShot(ObjectInCellEvent event){
-        for (ITankEventListener listener : _listeners){
-            listener.onTankShot(event);
-        }
-    }
-
-    /**
-     * Сообщение о пропуске хода
-     * @param event событие с информацией о танке
-     */
-    private void fireSkip(ObjectInCellEvent event){
-        for (ITankEventListener listener : _listeners){
-            listener.onTankSkipStep(event);
-        }
-    }
 
     /**
      * Слушатель снаряда

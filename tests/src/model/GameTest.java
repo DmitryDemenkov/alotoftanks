@@ -50,11 +50,11 @@ public class GameTest {
 
     @Test
     public void tankRotation_success(){
-        Tank activeTank = game.activeTank();
-        activeTank.rotate(Direction.WEST);
+        Player activePlayer = game.activePlayer();
+        activePlayer.rotate(Direction.WEST);
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
-        expectedObjectEvents.add(new ObjectInCellEvent(activeTank, ObjectInCellEvent.EventType.MOVED));
+        expectedObjectEvents.add(new ObjectInCellEvent(activePlayer.getTank(), ObjectInCellEvent.EventType.MOVED));
 
         Assertions.assertEquals(expectedObjectEvents.size(), objectInCellEvents.size());
         for (int i = 0; i < expectedObjectEvents.size(); i++){
@@ -67,8 +67,8 @@ public class GameTest {
 
     @Test
     public void tankRotation_notSuccess(){
-        Tank activeTank = game.activeTank();
-        activeTank.rotate(Direction.NORTH);
+        Player activePlayer = game.activePlayer();
+        activePlayer.rotate(Direction.NORTH);
 
         Assertions.assertEquals(0, objectInCellEvents.size());
         Assertions.assertEquals(0, gameStates.size());
@@ -76,13 +76,13 @@ public class GameTest {
 
     @Test
     public void tankMoving_success(){
-        Tank activeTank = game.activeTank();
-        activeTank.rotate(Direction.EAST);
-        activeTank.move();
+        Player activePlayer = game.activePlayer();
+        activePlayer.rotate(Direction.EAST);
+        activePlayer.move();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
-        expectedObjectEvents.add(new ObjectInCellEvent(activeTank, ObjectInCellEvent.EventType.MOVED));
-        expectedObjectEvents.add(new ObjectInCellEvent(activeTank, ObjectInCellEvent.EventType.MOVED));
+        expectedObjectEvents.add(new ObjectInCellEvent(activePlayer.getTank(), ObjectInCellEvent.EventType.MOVED));
+        expectedObjectEvents.add(new ObjectInCellEvent(activePlayer.getTank(), ObjectInCellEvent.EventType.MOVED));
 
         ArrayList<Game.State> expectedGameStates = new ArrayList<>();
         expectedGameStates.add(Game.State.GAME_IS_ON);
@@ -95,13 +95,13 @@ public class GameTest {
 
         Assertions.assertEquals(expectedGameStates.size(), gameStates.size());
         Assertions.assertEquals(expectedGameStates.get(0), gameStates.get(0));
-        Assertions.assertNotSame(game.activeTank(), activeTank);
+        Assertions.assertNotSame(game.activePlayer(), activePlayer);
     }
 
     @Test
     public void tankMoving_notSuccess(){
-        Tank activeTank = game.activeTank();
-        activeTank.move();
+        Player activePlayer = game.activePlayer();
+        activePlayer.move();
 
         Assertions.assertEquals(0, objectInCellEvents.size());
         Assertions.assertEquals(0, gameStates.size());
@@ -109,8 +109,8 @@ public class GameTest {
 
     @Test
     public void tankSkipStep(){
-        Tank activeTank = game.activeTank();
-        activeTank.pass();
+        Player activePlayer = game.activePlayer();
+        activePlayer.pass();
 
         ArrayList<Game.State> expectedGameStates = new ArrayList<>();
         expectedGameStates.add(Game.State.GAME_IS_ON);
@@ -119,22 +119,24 @@ public class GameTest {
 
         Assertions.assertEquals(expectedGameStates.size(), gameStates.size());
         Assertions.assertEquals(expectedGameStates.get(0), gameStates.get(0));
-        Assertions.assertNotSame(game.activeTank(), activeTank);
+        Assertions.assertNotSame(game.activePlayer(), activePlayer);
     }
 
     @Test
     public void tankShootingEnemyTank(){
         Bullet testBullet = new Bullet(Direction.NORTH, new Cell(new Position(0, 0)));
-        Tank tank1 = game.activeTank();
-        tank1.rotate(Direction.EAST);
-        tank1.move();
+        Player player1 = game.activePlayer();
+        Tank tank1 = player1.getTank();
+        player1.rotate(Direction.EAST);
+        player1.move();
 
-        Tank tank2 = game.activeTank();
-        tank2.rotate(Direction.WEST);
-        tank2.move();
+        Player player2 = game.activePlayer();
+        Tank tank2 = player2.getTank();
+        player2.rotate(Direction.WEST);
+        player2.move();
 
-        tank1.rotate(Direction.SOUTH);
-        tank1.shoot();
+        player1.rotate(Direction.SOUTH);
+        player1.shoot();
         waitGame();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
@@ -168,13 +170,13 @@ public class GameTest {
     @Test
     public void gameFinished_tankDestroyEnemyHeadquarters(){
         Bullet testBullet = new Bullet(Direction.NORTH, new Cell(new Position(0, 0)));
-        Tank activeTank = game.activeTank();
-        activeTank.rotate(Direction.EAST);
-        activeTank.shoot();
+        Player activePlayer = game.activePlayer();
+        activePlayer.rotate(Direction.EAST);
+        activePlayer.shoot();
         waitGame();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
-        expectedObjectEvents.add(new ObjectInCellEvent(activeTank, ObjectInCellEvent.EventType.MOVED));
+        expectedObjectEvents.add(new ObjectInCellEvent(activePlayer.getTank(), ObjectInCellEvent.EventType.MOVED));
         expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.MOVED));
         expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.MOVED));
         expectedObjectEvents.add(new ObjectInCellEvent(new Headquarters(), ObjectInCellEvent.EventType.DESTROYED));
@@ -191,6 +193,6 @@ public class GameTest {
 
         Assertions.assertEquals(expectedGameStates.size(), gameStates.size());
         Assertions.assertEquals(expectedGameStates.get(0), gameStates.get(0));
-        Assertions.assertSame(game.winner(), activeTank);
+        Assertions.assertSame(game.winner(), activePlayer);
     }
 }
