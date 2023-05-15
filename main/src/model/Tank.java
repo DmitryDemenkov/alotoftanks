@@ -113,8 +113,13 @@ public class Tank extends MovableObject implements Damageable {
     }
 
     @Override
+    public boolean isDestroying() {
+        return false;
+    }
+
+    @Override
     public boolean canFaceWith(ObjectInCell object) {
-        return object instanceof Bullet;
+        return object instanceof Bullet || object instanceof Thicket;
     }
 
     @Override

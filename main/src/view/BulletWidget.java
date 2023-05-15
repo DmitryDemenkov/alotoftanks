@@ -16,13 +16,13 @@ public class BulletWidget extends MovableObjectWidget {
 
     @Override
     protected File getImageFile() {
-        String path = ((Bullet)getObject()).isDetonating() ? "resources/explosion.png" : "resources/bullet.png";
+        String path = ((Bullet)getObject()).isDestroying() ? "resources/explosion.png" : "resources/bullet.png";
         return new File(path);
     }
 
     @Override
     public Dimension getDimension(){
-        int size = ((Bullet)getObject()).isDetonating() ? 60 : 20;
+        int size = ((Bullet)getObject()).isDestroying() ? 60 : 20;
         return new Dimension(size, size);
     }
 

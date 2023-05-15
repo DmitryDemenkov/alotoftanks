@@ -13,20 +13,17 @@ public class Wall extends Obstacle implements Damageable{
     private boolean _isDestroyed = false;
 
     @Override
+    public boolean isDestroying() {
+        return _isDestroyed;
+    }
+
+    @Override
     public void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
         if (object instanceof Bullet){
             _isDestroyed = true;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
-        }
-    }
-
-    @Override
-    void update() {
-        if (_isDestroyed){
-            getCell().takeObject(this);
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));
         }
     }
 }

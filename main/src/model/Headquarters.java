@@ -33,6 +33,11 @@ public class Headquarters extends ObjectInCell implements Damageable {
     }
 
     @Override
+    public boolean isDestroying() {
+        return _isDestroying;
+    }
+
+    @Override
     public boolean canFaceWith(ObjectInCell object) {
         return object instanceof Bullet;
     }
@@ -44,14 +49,6 @@ public class Headquarters extends ObjectInCell implements Damageable {
         if (object instanceof Bullet){
             _isDestroying = true;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
-        }
-    }
-
-    @Override
-    void update() {
-        if (_isDestroying){
-            getCell().takeObject(this);
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));
         }
     }
 }

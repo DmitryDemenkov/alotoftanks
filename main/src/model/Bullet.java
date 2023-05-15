@@ -12,7 +12,8 @@ public class Bullet extends MovableObject{
      */
     private boolean _isDestroying = false;
 
-    public boolean isDetonating(){
+    @Override
+    public boolean isDestroying(){
         return _isDestroying;
     }
 

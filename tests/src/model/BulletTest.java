@@ -92,7 +92,7 @@ public class BulletTest {
 
         bullet.faceWith(tank);
 
-        Assertions.assertTrue(bullet.isDetonating());
+        Assertions.assertTrue(bullet.isDestroying());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class BulletTest {
 
         bullet.faceWith(wall);
 
-        Assertions.assertTrue(bullet.isDetonating());
+        Assertions.assertTrue(bullet.isDestroying());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class BulletTest {
 
         bullet.faceWith(water);
 
-        Assertions.assertFalse(bullet.isDetonating());
+        Assertions.assertFalse(bullet.isDestroying());
     }
 
     @Test
@@ -125,7 +125,7 @@ public class BulletTest {
 
         bullet.faceWith(headquarters);
 
-        Assertions.assertTrue(bullet.isDetonating());
+        Assertions.assertTrue(bullet.isDestroying());
     }
 
     @Test
@@ -162,7 +162,7 @@ public class BulletTest {
             Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
             Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
         }
-        Assertions.assertTrue(bullet.isDetonating());
+        Assertions.assertTrue(bullet.isDestroying());
     }
 
     @Test void update_moving(){

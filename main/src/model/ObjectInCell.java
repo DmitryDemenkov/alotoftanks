@@ -23,7 +23,7 @@ public abstract class ObjectInCell {
     }
 
     void setCell(Cell cell){
-        if (_cell != null){
+        if (_cell != null && _cell != cell){
             _cell.takeObject(this);
         }
         _cell = cell;
@@ -34,6 +34,8 @@ public abstract class ObjectInCell {
     }
 
     /* -------------------------- Взаимодействие с другими объектами --------------- */
+
+    public abstract boolean isDestroying();
 
     /**
      * Может ли объект находится в одной ячейке с указанным объектом
@@ -56,7 +58,12 @@ public abstract class ObjectInCell {
     /**
      * Обновление состояния объекта, вызываемое из игрового цикла
      */
-    abstract void update();
+    void update(){
+        if (isDestroying()){
+            getCell().takeObject(this);
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));
+        }
+    }
 
     /* -------------------- Слушатели и события ------------------- */
 
@@ -67,6 +74,10 @@ public abstract class ObjectInCell {
 
     public void addListener(IObjectInCellEventListener listener) {
         _listeners.add(listener);
+    }
+
+    public void removeListener(IObjectInCellEventListener listener) {
+        _listeners.remove(listener);
     }
 
     /**
