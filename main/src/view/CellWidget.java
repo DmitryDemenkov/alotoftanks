@@ -50,7 +50,7 @@ public class CellWidget extends JPanel {
         } else {
             setBorder(BorderFactory.createEmptyBorder());
         }
-        repaint();
+        repaintLayers();
     }
 
     /**

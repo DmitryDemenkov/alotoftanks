@@ -86,5 +86,8 @@ public class SimpleEnvironment extends Environment{
         for (Position position : waterPositions()){
             field.getCell(position).addObject(new Water());
         }
+
+        field.getCell(new Position(5, 0)).addObject(new Thicket());
+        field.getCell(new Position(4, 2)).addObject(new Thicket());
     }
 }

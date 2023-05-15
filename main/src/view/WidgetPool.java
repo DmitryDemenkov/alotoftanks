@@ -47,6 +47,8 @@ public class WidgetPool {
             widget = new WaterWidget(water);
         } else if (object instanceof Bullet bullet){
             widget = new BulletWidget(bullet);
+        } else if (object instanceof Thicket thicket){
+            widget = new ThicketWidget(thicket);
         }
 
         _objectWidgets.put(object, widget);

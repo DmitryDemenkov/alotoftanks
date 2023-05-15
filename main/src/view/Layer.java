@@ -5,5 +5,6 @@ package view;
  */
 public enum Layer {
     BOTTOM,
+    MIDDLE,
     TOP
 }
