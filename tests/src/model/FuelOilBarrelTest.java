@@ -116,9 +116,13 @@ public class FuelOilBarrelTest {
 
         ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
         expectedEvents.add(new ObjectInCellEvent(barrel, ObjectInCellEvent.EventType.NEED_UPDATE));
+        expectedEvents.add(new ObjectInCellEvent(new Explosion(), ObjectInCellEvent.EventType.DAMAGED));
         expectedEvents.add(new ObjectInCellEvent(new Explosion(), ObjectInCellEvent.EventType.NEED_UPDATE));
+        expectedEvents.add(new ObjectInCellEvent(new Explosion(), ObjectInCellEvent.EventType.DAMAGED));
         expectedEvents.add(new ObjectInCellEvent(new Explosion(), ObjectInCellEvent.EventType.NEED_UPDATE));
+        expectedEvents.add(new ObjectInCellEvent(new Explosion(), ObjectInCellEvent.EventType.DAMAGED));
         expectedEvents.add(new ObjectInCellEvent(new Explosion(), ObjectInCellEvent.EventType.NEED_UPDATE));
+        expectedEvents.add(new ObjectInCellEvent(new Explosion(), ObjectInCellEvent.EventType.DAMAGED));
         expectedEvents.add(new ObjectInCellEvent(new Explosion(), ObjectInCellEvent.EventType.NEED_UPDATE));
         expectedEvents.add(new ObjectInCellEvent(barrel, ObjectInCellEvent.EventType.DAMAGED));
         expectedEvents.add(new ObjectInCellEvent(barrel, ObjectInCellEvent.EventType.NEED_UPDATE));
@@ -138,8 +142,8 @@ public class FuelOilBarrelTest {
 
         for (Direction direction : Direction.values()){
             Cell neighbour = cell.getNeighbour(direction);
-            Assertions.assertTrue(neighbour.getObjects().contains(explosions.get(direction.ordinal())));
-            Assertions.assertEquals(neighbour, explosions.get(direction.ordinal()).getCell());
+            Assertions.assertTrue(neighbour.getObjects().contains(explosions.get(direction.ordinal() * 2)));
+            Assertions.assertEquals(neighbour, explosions.get(direction.ordinal() * 2).getCell());
         }
     }
 }

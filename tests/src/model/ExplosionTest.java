@@ -81,26 +81,6 @@ public class ExplosionTest {
         explosion.setCell(cell);
 
         ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
-        expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.NEED_UPDATE));
-
-        Assertions.assertEquals(expectedEvents.size(), events.size());
-        for(int i = 0; i < events.size(); i++){
-            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
-            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
-        }
-        Assertions.assertFalse(explosion.isDestroying());
-    }
-
-    @Test
-    public void update_addingToCell(){
-        Cell cell = new Cell(new Position(0, 0));
-        explosion.addListener(new ObjectListener());
-
-        cell.addObject(explosion);
-        explosion.update();
-
-        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
-        expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.NEED_UPDATE));
         expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.DAMAGED));
         expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.NEED_UPDATE));
 
@@ -110,7 +90,6 @@ public class ExplosionTest {
             Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
         }
         Assertions.assertTrue(explosion.isDestroying());
-        Assertions.assertEquals(cell, explosion.getCell());
     }
 
     @Test
@@ -120,10 +99,8 @@ public class ExplosionTest {
 
         cell.addObject(explosion);
         explosion.update();
-        explosion.update();
 
         ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
-        expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.NEED_UPDATE));
         expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.DAMAGED));
         expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.NEED_UPDATE));
         expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.DESTROYED));
@@ -133,6 +110,7 @@ public class ExplosionTest {
             Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
             Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
         }
+        Assertions.assertTrue(explosion.isDestroying());
         Assertions.assertNull(explosion.getCell());
     }
 

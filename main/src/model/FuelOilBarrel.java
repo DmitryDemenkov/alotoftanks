@@ -39,12 +39,12 @@ public class FuelOilBarrel extends Obstacle implements Damageable {
     private void detonate(){
         ExplosionListener listener = new ExplosionListener();
         for (Direction direction : Direction.values()){
-
-            Explosion explosion = new Explosion();
-            explosion.addListener(listener);
-
             Cell neighbour = getCell().getNeighbour(direction);
-            neighbour.addObject(explosion);
+            if (neighbour != null){
+                Explosion explosion = new Explosion();
+                explosion.addListener(listener);
+                neighbour.addObject(explosion);
+            }
         }
     }
 

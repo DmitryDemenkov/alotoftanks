@@ -20,17 +20,8 @@ public class Explosion extends ObjectInCell implements Damaging {
     @Override
     void setCell(Cell cell){
         super.setCell(cell);
+        _isDestroying = true;
+        fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DAMAGED));
         fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
-    }
-
-    @Override
-    void update(){
-        if (isDestroying()) {
-            super.update();
-        } else {
-            _isDestroying = true;
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DAMAGED));
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
-        }
     }
 }
