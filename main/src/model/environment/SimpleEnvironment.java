@@ -87,7 +87,11 @@ public class SimpleEnvironment extends Environment{
             field.getCell(position).addObject(new Water());
         }
 
-        field.getCell(new Position(5, 0)).addObject(new Thicket());
+        field.getCell(new Position(1, 7)).addObject(new Thicket());
+        field.getCell(new Position(3, 7)).addObject(new Thicket());
+        field.getCell(new Position(2, 6)).addObject(new Thicket());
+        field.getCell(new Position(3, 6)).addObject(new Thicket());
+        field.getCell(new Position(1, 6)).addObject(new Thicket());
         field.getCell(new Position(4, 1)).addObject(new FuelOilBarrel());
         field.getCell(new Position(4, 2)).addObject(new FuelOilBarrel());
         field.getCell(new Position(4, 3)).addObject(new FuelOilBarrel());
