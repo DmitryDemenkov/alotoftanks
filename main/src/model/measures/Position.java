@@ -1,4 +1,4 @@
-package model;
+package model.measures;
 
 /**
  * Позиция ячейки на поле

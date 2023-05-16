@@ -1,9 +1,8 @@
 package model;
 
-import model.EnvironmentForTest;
-import model.Field;
-import model.Position;
+import model.measures.Position;
 import model.environment.Environment;
+import model.testprefabs.EnvironmentForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

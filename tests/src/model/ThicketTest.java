@@ -2,6 +2,9 @@ package model;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.measures.Position;
+import model.testprefabs.BulletForTest;
+import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +32,7 @@ public class ThicketTest {
 
     @Test
     public void canFaceWith_collisionWithTank(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
 
         boolean result = _thicket.canFaceWith(tank);
 
@@ -63,8 +66,8 @@ public class ThicketTest {
 
     @Test
     public void canFaceWith_thicketWithTank(){
-        Tank tank = new Tank();
-        Tank anotherTank = new Tank();
+        Tank tank = new TankForTest();
+        Tank anotherTank = new TankForTest();
         Cell cell = new Cell(new Position(0, 0));
 
         cell.addObject(_thicket);
@@ -78,7 +81,7 @@ public class ThicketTest {
 
     @Test
     public void faceWith_collisionWithTank(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
 
         _thicket.faceWith(tank);
 
@@ -107,7 +110,7 @@ public class ThicketTest {
 
     @Test
     public void faceWith_addingTankInCellWithThicket(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
         Cell cell = new Cell(new Position(0, 0));
 
         cell.addObject(_thicket);
@@ -127,7 +130,7 @@ public class ThicketTest {
 
     @Test
     public void update_addingTankInCellWithThicket(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
         Cell cell = new Cell(new Position(0, 0));
 
         cell.addObject(_thicket);
@@ -148,7 +151,7 @@ public class ThicketTest {
 
     @Test
     public void saveTankFromBullet(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
         Cell cell = new Cell(new Position(0, 0));
         Bullet bullet = new BulletForTest();
 

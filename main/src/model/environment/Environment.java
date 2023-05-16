@@ -1,7 +1,7 @@
 package model.environment;
 
 import model.Field;
-import model.Size;
+import model.measures.Size;
 
 /**
  * Окружение, определяющее размеры поля и наполняющее его объектами

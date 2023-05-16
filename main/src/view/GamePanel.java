@@ -2,7 +2,7 @@ package view;
 
 import events.IGameEventListener;
 import events.ObjectInCellEvent;
-import model.Direction;
+import model.measures.Direction;
 import model.Game;
 import model.Tank;
 import model.environment.SimpleEnvironment;

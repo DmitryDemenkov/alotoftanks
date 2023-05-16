@@ -49,7 +49,7 @@ public abstract class ObjectInCell {
      * @param object объект для столкновения
      * @throws IllegalArgumentException если столкновение невозможно
      */
-    public void faceWith(ObjectInCell object){
+    void faceWith(ObjectInCell object){
         if (!canFaceWith(object)){
             throw new IllegalArgumentException();
         }

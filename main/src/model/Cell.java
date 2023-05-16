@@ -1,5 +1,8 @@
 package model;
 
+import model.measures.Direction;
+import model.measures.Position;
+
 import java.util.*;
 
 /**

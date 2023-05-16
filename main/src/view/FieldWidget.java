@@ -2,7 +2,7 @@ package view;
 
 import model.Field;
 import model.Headquarters;
-import model.Position;
+import model.measures.Position;
 import model.Tank;
 
 import javax.swing.*;

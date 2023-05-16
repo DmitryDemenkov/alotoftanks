@@ -2,11 +2,20 @@ package model;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.measures.Direction;
+import model.properties.Damageable;
+import model.properties.Damaging;
+import model.properties.TankKeeper;
 
 public class Tank extends MovableObject implements Damageable {
 
-    public Tank(){
-        setDirection(Direction.NORTH);
+    public Tank(Direction direction, int health){
+        if (health <= 0){
+            throw new IllegalArgumentException("negative health amount");
+        }
+
+        _health = health;
+        setDirection(direction);
     }
 
     /* --------------------- Состояние танка ------------------ */
@@ -42,7 +51,7 @@ public class Tank extends MovableObject implements Damageable {
      * Поворот танка в указанном направлении
      * @param direction направление поворота
      */
-    public void rotate(Direction direction){
+    void rotate(Direction direction){
         if (direction == getDirection()){
             return;
         }
@@ -67,7 +76,7 @@ public class Tank extends MovableObject implements Damageable {
      * Соверщить выстрел
      * @return true если выстрел совершен успешно
      */
-    public boolean shoot(){
+    boolean shoot(){
         if (getCurrentReloadTime() > 0){
             return false;
         }
@@ -87,12 +96,12 @@ public class Tank extends MovableObject implements Damageable {
     /**
      * Пропустить ход
      */
-    public void pass(){
+    void pass(){
         _currentReloadTime -= 1;
     }
 
     @Override
-    public boolean move() {
+    protected boolean move() {
         boolean isMoved = super.move();
         if (isMoved){
             _currentReloadTime -= 1;
@@ -106,7 +115,7 @@ public class Tank extends MovableObject implements Damageable {
     /**
      * Здоровье танка
      */
-    private int _health = 3;
+    private int _health;
 
     public int getHealth(){
         return _health;
@@ -119,14 +128,14 @@ public class Tank extends MovableObject implements Damageable {
 
     @Override
     public boolean canFaceWith(ObjectInCell object) {
-        return object instanceof Bullet || object instanceof Thicket;
+        return object instanceof Damaging || object instanceof TankKeeper;
     }
 
     @Override
-    public void faceWith(ObjectInCell object) {
+    void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
-        if (object instanceof Bullet){
+        if (object instanceof Damaging){
             _isDamaged = true;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
         }

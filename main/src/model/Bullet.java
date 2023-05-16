@@ -1,11 +1,14 @@
 package model;
 
 import events.ObjectInCellEvent;
+import model.measures.Direction;
+import model.properties.Damageable;
+import model.properties.Damaging;
 
 /**
  * Снаряд выпускаемый танком
  */
-public class Bullet extends MovableObject{
+public class Bullet extends MovableObject implements Damaging {
 
     /**
      * Сосотояние снаряда, true - если мнаряд уничтожен
@@ -28,7 +31,7 @@ public class Bullet extends MovableObject{
     }
 
     @Override
-    public void faceWith(ObjectInCell object) {
+    void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
         if (object instanceof Damageable){
@@ -46,7 +49,7 @@ public class Bullet extends MovableObject{
     }
 
     @Override
-    public boolean move(){
+    protected boolean move(){
         boolean isMoved = super.move();
         if (isMoved){
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));

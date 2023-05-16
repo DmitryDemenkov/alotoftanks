@@ -2,11 +2,13 @@ package model;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.properties.TankKeeper;
 
-public class Thicket extends Obstacle {
+public class Thicket extends Obstacle implements TankKeeper {
 
     private Tank _tank;
 
+    @Override
     public Tank getTank(){
         return _tank;
     }
@@ -22,7 +24,7 @@ public class Thicket extends Obstacle {
     }
 
     @Override
-    public void faceWith(ObjectInCell object) {
+    void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
         if (object instanceof Tank tank){

@@ -1,5 +1,7 @@
 package model;
 
+import model.measures.Direction;
+import model.measures.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -2,6 +2,9 @@ package model;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.measures.Position;
+import model.testprefabs.BulletForTest;
+import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +33,7 @@ public class WallTest {
 
     @Test
     public void canFaceWith_collisionWithTank(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
 
         boolean result = wall.canFaceWith(tank);
 
@@ -64,7 +67,7 @@ public class WallTest {
 
     @Test
     public void faceWith_collisionWithTank(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
                 wall.faceWith(tank));

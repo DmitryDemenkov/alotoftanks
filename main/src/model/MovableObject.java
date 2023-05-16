@@ -1,5 +1,7 @@
 package model;
 
+import model.measures.Direction;
+
 public abstract class MovableObject extends ObjectInCell{
 
     /**
@@ -19,7 +21,7 @@ public abstract class MovableObject extends ObjectInCell{
      * Перемещение объекта в соседнюю ячейку в текущем направлении
      * @return true если побъект перемещен в новую ячейку
      */
-    public boolean move(){
+    protected boolean move(){
         Cell nextCell = getCell().getNeighbour(getDirection());
         if (nextCell == null){
             return false;

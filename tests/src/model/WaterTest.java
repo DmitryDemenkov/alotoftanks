@@ -1,7 +1,8 @@
 package model;
 
-import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.testprefabs.BulletForTest;
+import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ public class WaterTest {
 
     @Test
     public void canFaceWith_collisionWithTank(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
 
         boolean result = water.canFaceWith(tank);
 
@@ -51,7 +52,7 @@ public class WaterTest {
 
     @Test
     public void faceWith_collisionWithTank(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
                 water.faceWith(tank));
@@ -70,12 +71,7 @@ public class WaterTest {
         Bullet bullet = new BulletForTest();
         ObjectInCellEvent[] actualEvents = {null};
 
-        water.addListener(new IObjectInCellEventListener() {
-            @Override
-            public void onObjectInCellAction(ObjectInCellEvent event) {
-                actualEvents[0] = event;
-            }
-        });
+        water.addListener(event -> actualEvents[0] = event);
 
         water.faceWith(bullet);
 

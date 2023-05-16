@@ -2,6 +2,9 @@ package model;
 
 import events.IObjectInCellEventListener;
 import model.environment.Environment;
+import model.measures.Direction;
+import model.measures.Position;
+import model.measures.Size;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
 package view;
 
-import model.Direction;
+import model.measures.Direction;
 import model.MovableObject;
 import view.utils.ImageUtils;
 

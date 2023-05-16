@@ -1,6 +1,7 @@
 package model;
 
 import events.IPlayerListener;
+import model.measures.Direction;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -67,7 +68,7 @@ public class Player {
         firePlayerMadeMove();
     }
 
-    private Set<IPlayerListener> _listeners = new HashSet<>();
+    private final Set<IPlayerListener> _listeners = new HashSet<>();
 
     public void addListener(IPlayerListener listener){
         _listeners.add(listener);

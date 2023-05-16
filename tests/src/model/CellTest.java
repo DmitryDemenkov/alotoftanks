@@ -1,5 +1,9 @@
 package model;
 
+import model.measures.Direction;
+import model.measures.Position;
+import model.testprefabs.BulletForTest;
+import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +32,7 @@ public class CellTest {
 
     @Test
     public void addObject_addingInEmptyCell(){
-        ObjectInCell object = new Tank();
+        ObjectInCell object = new TankForTest();
 
         boolean result = cell.addObject(object);
 
@@ -39,7 +43,7 @@ public class CellTest {
 
     @Test
     public void addObject_addingInCellContainsObjectWithRightCollision(){
-        ObjectInCell tank = new Tank();
+        ObjectInCell tank = new TankForTest();
         ObjectInCell bullet = new BulletForTest();
 
         cell.addObject(tank);
@@ -54,7 +58,7 @@ public class CellTest {
 
     @Test
     public void addObject_addingInCellContainsObjectWithWrongCollision(){
-        ObjectInCell tank = new Tank();
+        ObjectInCell tank = new TankForTest();
         ObjectInCell wall = new Wall();
 
         cell.addObject(tank);
@@ -69,7 +73,7 @@ public class CellTest {
 
     @Test
     public void addObject_addingInCellContainsSameObject(){
-        ObjectInCell tank = new Tank();
+        ObjectInCell tank = new TankForTest();
 
         cell.addObject(tank);
         boolean result = cell.addObject(tank);
@@ -82,7 +86,7 @@ public class CellTest {
 
     @Test
     public void takeObject_takingFromCellContainsThisObject(){
-        ObjectInCell object = new Tank();
+        ObjectInCell object = new TankForTest();
         cell.addObject(object);
 
         ObjectInCell actualObject = cell.takeObject(object);
@@ -95,7 +99,7 @@ public class CellTest {
 
     @Test
     public void takeObject_takingFromEmptyCell(){
-        ObjectInCell object = new Tank();
+        ObjectInCell object = new TankForTest();
 
         ObjectInCell actualObject = cell.takeObject(object);
 
@@ -106,7 +110,7 @@ public class CellTest {
 
     @Test
     public void takeObject_takingFromCellNotContainsThisObject(){
-        ObjectInCell tank = new Tank();
+        ObjectInCell tank = new TankForTest();
         ObjectInCell wall = new Wall();
 
         cell.addObject(tank);

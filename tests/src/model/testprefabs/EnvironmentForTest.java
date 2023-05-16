@@ -1,18 +1,23 @@
-package model;
+package model.testprefabs;
 
+import model.Field;
+import model.Headquarters;
+import model.ObjectInCell;
+import model.Tank;
 import model.environment.Environment;
+import model.measures.Position;
+import model.measures.Size;
 
-import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 
 public class EnvironmentForTest extends Environment {
 
-    private Map<Position, ObjectInCell> _objectPositions = new HashMap<>();
+    private final Map<Position, ObjectInCell> _objectPositions = new HashMap<>();
 
     public EnvironmentForTest(){
-        Tank tank1 = new Tank();
-        Tank tank2 = new Tank();
+        Tank tank1 = new TankForTest();
+        Tank tank2 = new TankForTest();
 
         Headquarters headquarters1 = new Headquarters();
         Headquarters headquarters2 = new Headquarters();

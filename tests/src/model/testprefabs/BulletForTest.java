@@ -1,9 +1,9 @@
-package model;
+package model.testprefabs;
 
 import model.Bullet;
 import model.Cell;
-import model.Direction;
-import model.Position;
+import model.measures.Direction;
+import model.measures.Position;
 
 public class BulletForTest extends Bullet {
 

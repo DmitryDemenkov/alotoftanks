@@ -1,6 +1,9 @@
 package model.environment;
 
 import model.*;
+import model.measures.Direction;
+import model.measures.Position;
+import model.measures.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,12 +63,11 @@ public class SimpleEnvironment extends Environment{
     @Override
     public void fillField(Field field) {
 
-        Tank tank1 = new Tank();
+        Tank tank1 = new Tank(Direction.SOUTH, 3);
         Headquarters headquarters1 = new Headquarters();
         tank1.setHeadquarters(headquarters1);
-        tank1.rotate(Direction.SOUTH);
 
-        Tank tank2 = new Tank();
+        Tank tank2 = new Tank(Direction.NORTH, 3);
         Headquarters headquarters2 = new Headquarters();
         tank2.setHeadquarters(headquarters2);
 

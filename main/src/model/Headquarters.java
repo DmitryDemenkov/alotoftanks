@@ -1,6 +1,8 @@
 package model;
 
 import events.ObjectInCellEvent;
+import model.properties.Damageable;
+import model.properties.Damaging;
 
 /**
  * Штаб танка
@@ -39,14 +41,14 @@ public class Headquarters extends ObjectInCell implements Damageable {
 
     @Override
     public boolean canFaceWith(ObjectInCell object) {
-        return object instanceof Bullet;
+        return object instanceof Damaging;
     }
 
     @Override
-    public void faceWith(ObjectInCell object) {
+    void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
-        if (object instanceof Bullet){
+        if (object instanceof Damaging){
             _isDestroying = true;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
         }

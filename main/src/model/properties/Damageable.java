@@ -1,4 +1,4 @@
-package model;
+package model.properties;
 
 /**
  *  Интерфейс-метка, показывающий, что объект уязвим для снаряда

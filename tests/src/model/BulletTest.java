@@ -2,6 +2,10 @@ package model;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.measures.Direction;
+import model.measures.Position;
+import model.testprefabs.BulletForTest;
+import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +47,7 @@ public class BulletTest {
 
     @Test
     public void canFaceWith_collisionWithTank(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
 
         boolean result = bullet.canFaceWith(tank);
 
@@ -86,7 +90,7 @@ public class BulletTest {
 
     @Test
     public void faceWith_collisionWithTank(){
-        Tank tank = new Tank();
+        Tank tank = new TankForTest();
 
         bullet.addListener(new BulletListener());
 

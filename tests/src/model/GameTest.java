@@ -2,6 +2,9 @@ package model;
 
 import events.IGameEventListener;
 import events.ObjectInCellEvent;
+import model.measures.Direction;
+import model.measures.Position;
+import model.testprefabs.EnvironmentForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
