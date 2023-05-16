@@ -98,11 +98,11 @@ public class GamePanel extends JFrame {
             if (event.getType() == ObjectInCellEvent.EventType.MOVED && widget instanceof MovableObjectWidget movableWidget){
                 CellWidget cellWidget = event.getObject().getCell() != null ? _pool.getWidget(event.getObject().getCell()) : null;
                 movableWidget.moveTo(cellWidget);
-            } else{
+            } else if (event.getType() == ObjectInCellEvent.EventType.DAMAGED) {
                 widget.getDamage();
-                if (event.getType() == ObjectInCellEvent.EventType.DESTROYED){
-                    _pool.removeWidget(event.getObject());
-                }
+            } else {
+                widget.destroy();
+                _pool.removeWidget(event.getObject());
             }
         }
 

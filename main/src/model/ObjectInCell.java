@@ -59,7 +59,7 @@ public abstract class ObjectInCell {
      * Обновление состояния объекта, вызываемое из игрового цикла
      */
     void update(){
-        if (isDestroying()){
+        if (isDestroying() && getCell() != null){
             getCell().takeObject(this);
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));
         }
