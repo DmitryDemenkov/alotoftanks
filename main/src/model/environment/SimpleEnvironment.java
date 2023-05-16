@@ -74,7 +74,7 @@ public class SimpleEnvironment extends Environment{
         Headquarters headquarters2 = new Headquarters();
         tank2.setHeadquarters(headquarters2);
 
-        field.getCell(new Position(6, 0)).addObject(tank1);
+        field.getCell(new Position(4, 0)).addObject(tank1);
         field.getCell(new Position(2, 0)).addObject(headquarters1);
         field.getCell(new Position(2, 7)).addObject(tank2);
         field.getCell(new Position(5, 7)).addObject(headquarters2);
@@ -88,6 +88,10 @@ public class SimpleEnvironment extends Environment{
         }
 
         field.getCell(new Position(5, 0)).addObject(new Thicket());
-        field.getCell(new Position(4, 2)).addObject(new Thicket());
+        field.getCell(new Position(4, 1)).addObject(new FuelOilBarrel());
+        field.getCell(new Position(4, 2)).addObject(new FuelOilBarrel());
+        field.getCell(new Position(4, 3)).addObject(new FuelOilBarrel());
+        field.getCell(new Position(3, 2)).addObject(new FuelOilBarrel());
+        field.getCell(new Position(2, 2)).addObject(new FuelOilBarrel());
     }
 }

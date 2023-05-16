@@ -49,6 +49,10 @@ public class WidgetPool {
             widget = new BulletWidget(bullet);
         } else if (object instanceof Thicket thicket){
             widget = new ThicketWidget(thicket);
+        } else if (object instanceof Explosion explosion) {
+            widget = new ExplosionWidget(explosion, getWidget(explosion.getCell()));
+        } else if (object instanceof FuelOilBarrel barrel){
+            widget = new FuelOilBarrelWidget(barrel);
         }
 
         _objectWidgets.put(object, widget);
