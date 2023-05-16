@@ -130,22 +130,20 @@ public class GameTest {
         Bullet testBullet = new Bullet(Direction.NORTH, new Cell(new Position(0, 0)));
         Player player1 = game.activePlayer();
         Tank tank1 = player1.getTank();
-        player1.rotate(Direction.EAST);
+        player1.rotate(Direction.SOUTH);
         player1.move();
 
         Player player2 = game.activePlayer();
         Tank tank2 = player2.getTank();
-        player2.rotate(Direction.WEST);
         player2.move();
 
-        player1.rotate(Direction.SOUTH);
+        player1.rotate(Direction.EAST);
         player1.shoot();
         waitGame();
 
         ArrayList<ObjectInCellEvent> expectedObjectEvents = new ArrayList<>();
         expectedObjectEvents.add(new ObjectInCellEvent(tank1, ObjectInCellEvent.EventType.MOVED));
         expectedObjectEvents.add(new ObjectInCellEvent(tank1, ObjectInCellEvent.EventType.MOVED));
-        expectedObjectEvents.add(new ObjectInCellEvent(tank2, ObjectInCellEvent.EventType.MOVED));
         expectedObjectEvents.add(new ObjectInCellEvent(tank2, ObjectInCellEvent.EventType.MOVED));
         expectedObjectEvents.add(new ObjectInCellEvent(tank1, ObjectInCellEvent.EventType.MOVED));
         expectedObjectEvents.add(new ObjectInCellEvent(testBullet, ObjectInCellEvent.EventType.MOVED));
@@ -156,7 +154,7 @@ public class GameTest {
         ArrayList<Game.State> expectedGameStates = new ArrayList<>();
         expectedGameStates.add(Game.State.GAME_IS_ON);
         expectedGameStates.add(Game.State.GAME_IS_ON);
-        expectedGameStates.add(Game.State.GAME_IS_ON);
+        expectedGameStates.add(Game.State.WINNER_FOUND);
 
         Assertions.assertEquals(expectedObjectEvents.size(), objectInCellEvents.size());
         for (int i = 0; i < expectedObjectEvents.size(); i++){
@@ -197,5 +195,26 @@ public class GameTest {
         Assertions.assertEquals(expectedGameStates.size(), gameStates.size());
         Assertions.assertEquals(expectedGameStates.get(0), gameStates.get(0));
         Assertions.assertSame(game.winner(), activePlayer);
+    }
+
+    @Test
+    public void gameFinished_draw(){
+        Player player1 = game.activePlayer();
+        player1.pass();
+
+        Player player2 = game.activePlayer();
+        player2.rotate(Direction.WEST);
+        player2.shoot();
+        waitGame();
+
+        ArrayList<Game.State> expectedGameStates = new ArrayList<>();
+        expectedGameStates.add(Game.State.GAME_IS_ON);
+        expectedGameStates.add(Game.State.DRAW);
+
+        Assertions.assertEquals(expectedGameStates.size(), gameStates.size());
+        for (int i = 0; i < gameStates.size(); i++){
+            Assertions.assertEquals(expectedGameStates.get(i), gameStates.get(i));
+        }
+        Assertions.assertNull(game.winner());
     }
 }

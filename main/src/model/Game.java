@@ -15,7 +15,8 @@ public class Game {
      */
     public enum State {
         GAME_IS_ON,
-        WINNER_FOUND
+        WINNER_FOUND,
+        DRAW
     }
 
     public Game(Environment environment){
@@ -129,15 +130,21 @@ public class Game {
      * @return текущее состояние
      */
     private State checkState(){
-        for (int i = 0; i < _players.size() && _winner == null; i++){
-            Player player = _players.get(i);
-            if (!player.isAlive()){
-                _winner = getEnemy(player);
+        Player winner = null;
+        int alivePlayersCount = 0;
+        for (Player player : _players) {
+            if (!player.isAlive()) {
+                winner = getEnemy(player);
+            } else {
+                alivePlayersCount++;
             }
         }
 
         State state = State.GAME_IS_ON;
-        if (_winner != null){
+        if (alivePlayersCount == 0) {
+            state = State.DRAW;
+        } else if (winner != null){
+            _winner = winner;
             state = State.WINNER_FOUND;
         }
         return state;

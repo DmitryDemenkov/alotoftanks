@@ -1,10 +1,8 @@
 package model.testprefabs;
 
-import model.Field;
-import model.Headquarters;
-import model.ObjectInCell;
-import model.Tank;
+import model.*;
 import model.environment.Environment;
+import model.measures.Direction;
 import model.measures.Position;
 import model.measures.Size;
 
@@ -16,8 +14,8 @@ public class EnvironmentForTest extends Environment {
     private final Map<Position, ObjectInCell> _objectPositions = new HashMap<>();
 
     public EnvironmentForTest(){
-        Tank tank1 = new TankForTest();
-        Tank tank2 = new TankForTest();
+        Tank tank1 = new Tank(Direction.NORTH, 3);
+        Tank tank2 = new Tank(Direction.NORTH, 1);
 
         Headquarters headquarters1 = new Headquarters();
         Headquarters headquarters2 = new Headquarters();
@@ -29,6 +27,7 @@ public class EnvironmentForTest extends Environment {
         _objectPositions.put(new Position(2, 2), tank2);
         _objectPositions.put(new Position(0, 2), headquarters1);
         _objectPositions.put(new Position(2, 0), headquarters2);
+        _objectPositions.put(new Position(1, 2), new FuelOilBarrel());
     }
 
     @Override
