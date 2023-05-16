@@ -118,6 +118,9 @@ public class GamePanel extends JFrame {
                 String winnerName = getColorName(((TankWidget)_pool.getWidget(_game.winner().getTank())).getColor());
                 JOptionPane.showMessageDialog(GamePanel.this, winnerName + " танк победил");
                 restart();
+            } else if (state == Game.State.DRAW) {
+                JOptionPane.showMessageDialog(GamePanel.this, "Игра завершилась вничью");
+                restart();
             }
         }
 
