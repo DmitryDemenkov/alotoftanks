@@ -121,6 +121,8 @@ public class Tank extends MovableObject implements Damageable {
         return _health;
     }
 
+    private int takenDamage = 0;
+
     @Override
     public boolean isDestroying() {
         return false;
@@ -136,16 +138,20 @@ public class Tank extends MovableObject implements Damageable {
         super.faceWith(object);
 
         if (object instanceof Damaging){
-            _isDamaged = true;
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
+            takenDamage += 1;
+            if (!_isDamaged){
+                _isDamaged = true;
+                fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
+            }
         }
     }
 
     @Override
     void update() {
         if (_isDamaged && getHealth() > 0){
-            _health = getHealth() - 1;
+            _health = getHealth() - takenDamage;
             _isDamaged = false;
+            takenDamage = 0;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DAMAGED));
         }
     }
