@@ -108,6 +108,14 @@ public class Tank extends MovableObject implements Damageable {
         boolean isMoved = super.move();
         if (isMoved){
             _currentReloadTime -= 1;
+        }
+        return isMoved;
+    }
+
+    @Override
+    protected boolean moveAt(Cell newCell){
+        boolean isMoved = super.moveAt(newCell);
+        if (isMoved){
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
         }
         return isMoved;
@@ -133,7 +141,7 @@ public class Tank extends MovableObject implements Damageable {
 
     @Override
     public boolean canFaceWith(ObjectInCell object) {
-        return super.canFaceWith(object) || object instanceof Damaging;
+        return object instanceof Damaging || canBeParent(object);
     }
 
     @Override

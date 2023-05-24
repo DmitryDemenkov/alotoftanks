@@ -26,11 +26,14 @@ public abstract class MovableObject extends ObjectInCell {
      */
     protected boolean move(){
         Cell nextCell = getCell().getNeighbour(getDirection());
-        if (nextCell == null){
+        return moveAt(nextCell);
+    }
+
+    protected boolean moveAt(Cell newCell){
+        if (newCell == null){
             return false;
         }
-
-        return nextCell.addObject(this);
+        return  newCell.addObject(this);
     }
 
     @Override

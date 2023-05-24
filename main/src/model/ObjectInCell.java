@@ -2,7 +2,6 @@ package model;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
-import model.cellobjects.tank.Tank;
 import model.properties.ObjectKeeper;
 
 import java.util.HashSet;
@@ -43,12 +42,24 @@ public abstract class ObjectInCell {
     private ObjectKeeper<? extends ObjectInCell> _parent;
 
     protected void setParent(ObjectKeeper<? extends ObjectInCell> parent){
-        if (!parent.getObject().getClass().equals(this.getClass())) {
+        if (!canBeParent(parent)) {
             return;
         }
 
         unsetCell();
         _parent = parent;
+    }
+
+    protected boolean canBeParent(ObjectInCell object){
+        boolean isObjectKeeper = false;
+        if (object instanceof ObjectKeeper<?> objectKeeper){
+            isObjectKeeper = canBeParent(objectKeeper);
+        }
+        return isObjectKeeper;
+    }
+
+    private boolean canBeParent(ObjectKeeper<? extends ObjectInCell> parent){
+        return parent.getObjectClass().isAssignableFrom(this.getClass());
     }
 
     /* -------------------------- Взаимодействие с другими объектами --------------- */
@@ -60,13 +71,7 @@ public abstract class ObjectInCell {
      * @param object объект, с котоым проверяется столкновение
      * @return true если столькновение возможно
      */
-    public boolean canFaceWith(ObjectInCell object){
-        boolean isObjectKeeper = false;
-        if (object instanceof ObjectKeeper<?> objectKeeper){
-            isObjectKeeper = objectKeeper.getObjectClass().isAssignableFrom(this.getClass());
-        }
-        return  isObjectKeeper;
-    }
+    public abstract boolean canFaceWith(ObjectInCell object);
 
     /**
      * Столкнуть объект с переданным

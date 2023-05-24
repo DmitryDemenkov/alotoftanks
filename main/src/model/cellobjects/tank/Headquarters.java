@@ -43,7 +43,7 @@ public class Headquarters extends ObjectInCell implements Damageable {
 
     @Override
     public boolean canFaceWith(ObjectInCell object) {
-        return super.canFaceWith(object) || object instanceof Damaging;
+        return object instanceof Damaging || canBeParent(object);
     }
 
     @Override

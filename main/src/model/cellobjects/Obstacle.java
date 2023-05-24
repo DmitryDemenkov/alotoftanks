@@ -9,7 +9,7 @@ import model.properties.Damaging;
 public abstract class Obstacle extends ObjectInCell {
     @Override
     public boolean canFaceWith(ObjectInCell object){
-        return super.canFaceWith(object) || object instanceof Damaging;
+        return object instanceof Damaging || canBeParent(object);
     }
 
     @Override

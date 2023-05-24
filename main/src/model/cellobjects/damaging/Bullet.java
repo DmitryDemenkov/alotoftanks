@@ -23,6 +23,8 @@ public class Bullet extends MovableObject implements Damaging {
         return _isDestroying;
     }
 
+    private boolean _isFrozen = false;
+
     public Bullet(Direction direction, Cell startCell){
         setDirection(direction);
         setCell(startCell);
@@ -40,6 +42,10 @@ public class Bullet extends MovableObject implements Damaging {
         if (object instanceof Damageable){
             _isDestroying = true;
         }
+
+        if (canBeParent(object)){
+            _isFrozen = true;
+        }
     }
 
     @Override
@@ -53,14 +59,27 @@ public class Bullet extends MovableObject implements Damaging {
 
     @Override
     protected boolean move(){
-        boolean isMoved = super.move();
+        return super.move();
+    }
+
+    @Override
+    protected boolean moveAt(Cell newCell){
+        boolean isMoved = super.moveAt(newCell);
         if (isMoved){
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
-            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
+            fireMoved();
         } else {
             destroy();
         }
         return isMoved;
+    }
+
+    private void fireMoved(){
+        fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
+        if (!_isFrozen){
+            fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
+        } else {
+            _isFrozen = false;
+        }
     }
 
     private void destroy(){
