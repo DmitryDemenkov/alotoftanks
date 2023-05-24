@@ -1,9 +1,9 @@
 package view;
 
 import model.Field;
-import model.Headquarters;
+import model.cellobjects.tank.Headquarters;
 import model.measures.Position;
-import model.Tank;
+import model.cellobjects.tank.Tank;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,7 @@
 package view;
 
 import model.measures.Direction;
-import model.MovableObject;
+import model.cellobjects.MovableObject;
 import view.utils.ImageUtils;
 
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package model;
+package model.cellobjects.tank;
 
 import events.IPlayerListener;
 import model.measures.Direction;
@@ -10,7 +10,7 @@ public class Player {
 
     private boolean _isActive = false;
 
-    void setActive(boolean active){
+    public void setActive(boolean active){
         _isActive = active;
     }
 

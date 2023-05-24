@@ -1,5 +1,6 @@
 package model;
 
+import model.cellobjects.Wall;
 import model.measures.Direction;
 import model.measures.Position;
 import model.testprefabs.BulletForTest;

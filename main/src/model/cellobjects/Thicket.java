@@ -1,16 +1,23 @@
-package model;
+package model.cellobjects;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
-import model.properties.TankKeeper;
+import model.ObjectInCell;
+import model.cellobjects.tank.Tank;
+import model.properties.ObjectKeeper;
 
-public class Thicket extends Obstacle implements TankKeeper {
+public class Thicket extends Obstacle implements ObjectKeeper<Tank> {
 
     private Tank _tank;
 
     @Override
-    public Tank getTank(){
+    public Tank getObject(){
         return _tank;
+    }
+
+    @Override
+    public Class<Tank> getObjectClass() {
+        return Tank.class;
     }
 
     @Override
@@ -20,31 +27,31 @@ public class Thicket extends Obstacle implements TankKeeper {
 
     @Override
     public boolean canFaceWith(ObjectInCell object){
-        return super.canFaceWith(object) || (object instanceof Tank && getTank() == null);
+        return super.canFaceWith(object) || (object instanceof Tank && getObject() == null);
     }
 
     @Override
-    void faceWith(ObjectInCell object) {
+    protected void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
         if (object instanceof Tank tank){
             _tank = tank;
-            getTank().addListener(_tankListener);
+            getObject().addListener(_tankListener);
             fireNeedUpdate();
         }
     }
 
     @Override
-    void update(){
-        if (getTank() == null || getCell() == null){
+    protected void update(){
+        if (getObject() == null || getCell() == null){
             return;
         }
 
-        if (getTank().getCell() == getCell()){
-            getCell().takeObject(getTank());
-            getTank().setCell(getCell());
+        if (getObject().getCell() == getCell()){
+            getCell().takeObject(getObject());
+            getObject().setParent(this);
         } else {
-            getTank().removeListener(_tankListener);
+            getObject().removeListener(_tankListener);
             _tank = null;
         }
     }
@@ -59,7 +66,7 @@ public class Thicket extends Obstacle implements TankKeeper {
 
         @Override
         public void onObjectInCellAction(ObjectInCellEvent event) {
-            if (event.getObject() != getTank()) {
+            if (event.getObject() != getObject()) {
                 return;
             }
 

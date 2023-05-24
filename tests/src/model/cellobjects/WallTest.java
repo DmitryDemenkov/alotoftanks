@@ -1,8 +1,14 @@
-package model;
+package model.cellobjects;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.Cell;
+import model.cellobjects.damaging.Bullet;
+import model.cellobjects.damaging.Explosion;
+import model.cellobjects.damaging.ExplosionTest;
+import model.cellobjects.tank.Tank;
 import model.measures.Position;
+import model.testprefabs.BulletForTest;
 import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,13 +16,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-public class ExplosionTest {
+public class WallTest {
 
-    private Explosion explosion;
+    private Wall wall;
 
-    private final ArrayList<ObjectInCellEvent> events = new ArrayList<>();
-
-    private class ObjectListener implements IObjectInCellEventListener {
+    private class WallObserver implements IObjectInCellEventListener{
 
         @Override
         public void onObjectInCellAction(ObjectInCellEvent event) {
@@ -24,9 +28,11 @@ public class ExplosionTest {
         }
     }
 
+    private final ArrayList<ObjectInCellEvent> events = new ArrayList<>();
+
     @BeforeEach
-    public void createTestConfiguration(){
-        explosion = new Explosion();
+    public void testConfiguration(){
+        wall = new Wall();
         events.clear();
     }
 
@@ -34,92 +40,99 @@ public class ExplosionTest {
     public void canFaceWith_collisionWithTank(){
         Tank tank = new TankForTest();
 
-        boolean result = explosion.canFaceWith(tank);
-
-        Assertions.assertTrue(result);
-    }
-
-    @Test
-    public void canFaceWith_collisionWithWall(){
-        Obstacle wall = new Wall();
-
-        boolean result = explosion.canFaceWith(wall);
-
-        Assertions.assertTrue(result);
-    }
-
-    @Test
-    public void canFaceWith_collisionWithWater(){
-        Obstacle water = new Water();
-
-        boolean result = explosion.canFaceWith(water);
-
-        Assertions.assertTrue(result);
-    }
-
-    @Test
-    public void canFaceWith_collisionWithBullet(){
-        Explosion otherExplosion = new Explosion();
-
-        boolean result = explosion.canFaceWith(otherExplosion);
-
-        Assertions.assertTrue(result);
-    }
-
-    @Test
-    public void canFaceWith_collisionWithSameObject(){
-        boolean result = explosion.canFaceWith(explosion);
+        boolean result = wall.canFaceWith(tank);
 
         Assertions.assertFalse(result);
     }
 
     @Test
-    public void setCell_addingToCell(){
-        Cell cell = new Cell(new Position(0, 0));
-        explosion.addListener(new ObjectListener());
+    public void canFaceWith_collisionWithObstacle(){
+        Obstacle obstacle = new Wall();
 
-        explosion.setCell(cell);
+        boolean result = wall.canFaceWith(obstacle);
 
-        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
-        expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.DAMAGED));
-        expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.NEED_UPDATE));
-
-        Assertions.assertEquals(expectedEvents.size(), events.size());
-        for(int i = 0; i < events.size(); i++){
-            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
-            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
-        }
-        Assertions.assertTrue(explosion.isDestroying());
+        Assertions.assertFalse(result);
     }
 
     @Test
-    public void update_destroying(){
-        Cell cell = new Cell(new Position(0, 0));
-        explosion.addListener(new ObjectListener());
+    public void canFaceWith_collisionWithSameObject(){
+        boolean result = wall.canFaceWith(wall);
 
-        cell.addObject(explosion);
-        explosion.update();
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void canFaceWith_collisionWithBullet(){
+        Bullet bullet = new BulletForTest();
+
+        boolean result = wall.canFaceWith(bullet);
+
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void faceWith_collisionWithTank(){
+        Tank tank = new TankForTest();
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                wall.faceWith(tank));
+    }
+
+    @Test
+    public void faceWith_collisionWithObstacle(){
+        Obstacle wall = new Wall();
+
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                wall.faceWith(wall));
+    }
+
+    @Test
+    public void faceWith_collisionWithBullet() {
+        Bullet bullet = new BulletForTest();
+
+        wall.addListener(new WallObserver());
+
+        wall.faceWith(bullet);
 
         ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
-        expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.DAMAGED));
-        expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.NEED_UPDATE));
-        expectedEvents.add(new ObjectInCellEvent(explosion, ObjectInCellEvent.EventType.DESTROYED));
+        expectedEvents.add(new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.NEED_UPDATE));
 
         Assertions.assertEquals(expectedEvents.size(), events.size());
         for(int i = 0; i < events.size(); i++){
             Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
             Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
         }
-        Assertions.assertTrue(explosion.isDestroying());
-        Assertions.assertNull(explosion.getCell());
+    }
+
+    @Test
+    public void update_destroying() {
+        Cell cell = new Cell(new Position(0, 0));
+        Bullet bullet = new BulletForTest();
+
+        wall.addListener(new WallObserver());
+
+        cell.addObject(wall);
+        cell.addObject(bullet);
+        wall.update();
+
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.NEED_UPDATE));
+        expectedEvents.add(new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.DESTROYED));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
+        Assertions.assertNull(wall.getCell());
     }
 
     @Test
     public void faceWith_destroyingWall(){
         Wall wall = new Wall();
-        wall.addListener(new ObjectListener());
+        wall.addListener(new  WallObserver());
 
-        wall.faceWith(explosion);
+        wall.faceWith(new Explosion());
 
         ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
         expectedEvents.add(new ObjectInCellEvent(wall, ObjectInCellEvent.EventType.NEED_UPDATE));
@@ -135,10 +148,10 @@ public class ExplosionTest {
     public void update_destroyingWall(){
         Cell cell = new Cell(new Position(0, 0));
         Wall wall = new Wall();
-        wall.addListener(new ObjectListener());
+        wall.addListener(new WallObserver());
 
         cell.addObject(wall);
-        cell.addObject(explosion);
+        cell.addObject(new Explosion());
         wall.update();
 
         ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();

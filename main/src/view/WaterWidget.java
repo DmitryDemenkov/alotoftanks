@@ -1,6 +1,6 @@
 package view;
 
-import model.Water;
+import model.cellobjects.Water;
 
 import java.io.File;
 

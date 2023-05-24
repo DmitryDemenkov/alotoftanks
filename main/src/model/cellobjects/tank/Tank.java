@@ -1,11 +1,14 @@
-package model;
+package model.cellobjects.tank;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.Cell;
+import model.ObjectInCell;
+import model.cellobjects.damaging.Bullet;
+import model.cellobjects.MovableObject;
 import model.measures.Direction;
 import model.properties.Damageable;
 import model.properties.Damaging;
-import model.properties.TankKeeper;
 
 public class Tank extends MovableObject implements Damageable {
 
@@ -130,11 +133,11 @@ public class Tank extends MovableObject implements Damageable {
 
     @Override
     public boolean canFaceWith(ObjectInCell object) {
-        return object instanceof Damaging || object instanceof TankKeeper;
+        return super.canFaceWith(object) || object instanceof Damaging;
     }
 
     @Override
-    void faceWith(ObjectInCell object) {
+    protected void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
         if (object instanceof Damaging){
@@ -147,7 +150,7 @@ public class Tank extends MovableObject implements Damageable {
     }
 
     @Override
-    void update() {
+    protected void update() {
         if (_isDamaged && getHealth() > 0){
             _health = getHealth() - takenDamage;
             _isDamaged = false;

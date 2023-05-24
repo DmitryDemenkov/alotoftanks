@@ -2,6 +2,8 @@ package model;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.cellobjects.tank.Tank;
+import model.properties.ObjectKeeper;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,18 +21,34 @@ public abstract class ObjectInCell {
     private Cell _cell;
 
     public Cell getCell(){
-        return _cell;
+        Cell cell = _cell;
+        if (_parent != null){
+            cell = _parent.getCell();
+        }
+        return cell;
     }
 
-    void setCell(Cell cell){
+    protected void setCell(Cell cell){
         if (_cell != null && _cell != cell){
             _cell.takeObject(this);
         }
+        _parent = null;
         _cell = cell;
     }
 
-    void unsetCell(){
-        _cell = null;
+    protected void unsetCell(){
+        setCell(null);
+    }
+
+    private ObjectKeeper<? extends ObjectInCell> _parent;
+
+    protected void setParent(ObjectKeeper<? extends ObjectInCell> parent){
+        if (!parent.getObject().getClass().equals(this.getClass())) {
+            return;
+        }
+
+        unsetCell();
+        _parent = parent;
     }
 
     /* -------------------------- Взаимодействие с другими объектами --------------- */
@@ -42,14 +60,20 @@ public abstract class ObjectInCell {
      * @param object объект, с котоым проверяется столкновение
      * @return true если столькновение возможно
      */
-    public abstract boolean canFaceWith(ObjectInCell object);
+    public boolean canFaceWith(ObjectInCell object){
+        boolean isObjectKeeper = false;
+        if (object instanceof ObjectKeeper<?> objectKeeper){
+            isObjectKeeper = objectKeeper.getObjectClass().isAssignableFrom(this.getClass());
+        }
+        return  isObjectKeeper;
+    }
 
     /**
      * Столкнуть объект с переданным
      * @param object объект для столкновения
      * @throws IllegalArgumentException если столкновение невозможно
      */
-    void faceWith(ObjectInCell object){
+    protected void faceWith(ObjectInCell object){
         if (!canFaceWith(object)){
             throw new IllegalArgumentException();
         }
@@ -58,7 +82,7 @@ public abstract class ObjectInCell {
     /**
      * Обновление состояния объекта, вызываемое из игрового цикла
      */
-    void update(){
+    protected void update(){
         if (isDestroying() && getCell() != null){
             getCell().takeObject(this);
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));

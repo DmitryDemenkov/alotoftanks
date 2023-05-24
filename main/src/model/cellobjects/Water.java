@@ -1,4 +1,4 @@
-package model;
+package model.cellobjects;
 
 /**
  * Вода, мешающая танку и неуязвима для снаряла

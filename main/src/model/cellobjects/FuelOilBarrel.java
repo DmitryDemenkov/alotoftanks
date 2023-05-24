@@ -1,7 +1,10 @@
-package model;
+package model.cellobjects;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.Cell;
+import model.ObjectInCell;
+import model.cellobjects.damaging.Explosion;
 import model.measures.Direction;
 import model.properties.Damageable;
 import model.properties.Damaging;
@@ -16,7 +19,7 @@ public class FuelOilBarrel extends Obstacle implements Damageable {
     }
 
     @Override
-    void faceWith(ObjectInCell object){
+    protected void faceWith(ObjectInCell object){
         super.faceWith(object);
 
         if (object instanceof Damaging){
@@ -25,7 +28,7 @@ public class FuelOilBarrel extends Obstacle implements Damageable {
     }
 
     @Override
-    void update(){
+    protected void update(){
         if (!isDestroying()){
             detonate();
             _isDestroying = true;

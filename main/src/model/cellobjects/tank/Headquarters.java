@@ -1,6 +1,8 @@
-package model;
+package model.cellobjects.tank;
 
 import events.ObjectInCellEvent;
+import model.ObjectInCell;
+import model.cellobjects.tank.Tank;
 import model.properties.Damageable;
 import model.properties.Damaging;
 
@@ -41,16 +43,21 @@ public class Headquarters extends ObjectInCell implements Damageable {
 
     @Override
     public boolean canFaceWith(ObjectInCell object) {
-        return object instanceof Damaging;
+        return super.canFaceWith(object) || object instanceof Damaging;
     }
 
     @Override
-    void faceWith(ObjectInCell object) {
+    protected void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
         if (object instanceof Damaging){
             _isDestroying = true;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
         }
+    }
+
+    @Override
+    protected void update() {
+        super.update();
     }
 }

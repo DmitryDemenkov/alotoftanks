@@ -1,6 +1,6 @@
 package view;
 
-import model.Tank;
+import model.cellobjects.tank.Tank;
 
 import java.awt.*;
 import java.io.File;

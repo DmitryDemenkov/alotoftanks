@@ -1,8 +1,11 @@
-package model;
+package model.cellobjects;
 
+import model.Cell;
+import model.ObjectInCell;
 import model.measures.Direction;
+import model.properties.ObjectKeeper;
 
-public abstract class MovableObject extends ObjectInCell{
+public abstract class MovableObject extends ObjectInCell {
 
     /**
      * Направление, в котором движется объект
@@ -13,7 +16,7 @@ public abstract class MovableObject extends ObjectInCell{
         return _direction;
     }
 
-    void setDirection(Direction direction){
+    protected void setDirection(Direction direction){
         _direction = direction;
     }
 
@@ -28,5 +31,10 @@ public abstract class MovableObject extends ObjectInCell{
         }
 
         return nextCell.addObject(this);
+    }
+
+    @Override
+    protected void setParent(ObjectKeeper<? extends ObjectInCell> parent){
+        super.setParent(parent);
     }
 }

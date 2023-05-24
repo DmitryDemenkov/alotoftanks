@@ -1,9 +1,16 @@
-package model;
+package model.cellobjects;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.Cell;
+import model.Field;
+import model.cellobjects.damaging.Bullet;
+import model.cellobjects.damaging.Explosion;
+import model.cellobjects.tank.Tank;
+import model.environment.Environment;
 import model.measures.Direction;
 import model.measures.Position;
+import model.measures.Size;
 import model.testprefabs.BulletForTest;
 import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
@@ -102,11 +109,19 @@ public class FuelOilBarrelTest {
 
     @Test
     public void update_detonating(){
-        Cell cell = new Cell(new Position(0, 0));
-        cell.setNeighbour(new Cell(new Position(0, 1)));
-        cell.setNeighbour(new Cell(new Position(0, -1)));
-        cell.setNeighbour(new Cell(new Position(1, 0)));
-        cell.setNeighbour(new Cell(new Position(-1, 0)));
+        Field field = new Field(new Environment() {
+            @Override
+            public Size fieldSize() {
+                return new Size(3, 3);
+            }
+
+            @Override
+            public void fillField(Field field) {
+
+            }
+        });
+
+        Cell cell = field.getCell(new Position(1, 1));
 
         barrel.addListener(new ObjectObserver());
 

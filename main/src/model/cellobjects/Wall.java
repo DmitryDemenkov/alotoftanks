@@ -1,6 +1,7 @@
-package model;
+package model.cellobjects;
 
 import events.ObjectInCellEvent;
+import model.ObjectInCell;
 import model.properties.Damageable;
 import model.properties.Damaging;
 
@@ -20,12 +21,17 @@ public class Wall extends Obstacle implements Damageable {
     }
 
     @Override
-    void faceWith(ObjectInCell object) {
+    protected void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
         if (object instanceof Damaging){
             _isDestroyed = true;
             fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.NEED_UPDATE));
         }
+    }
+
+    @Override
+    protected void update() {
+        super.update();
     }
 }

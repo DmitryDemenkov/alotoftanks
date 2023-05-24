@@ -1,6 +1,7 @@
 package model;
 
 import events.IObjectInCellEventListener;
+import model.cellobjects.tank.Tank;
 import model.environment.Environment;
 import model.measures.Direction;
 import model.measures.Position;

@@ -1,6 +1,9 @@
 package model.environment;
 
 import model.*;
+import model.cellobjects.*;
+import model.cellobjects.tank.Headquarters;
+import model.cellobjects.tank.Tank;
 import model.measures.Direction;
 import model.measures.Position;
 import model.measures.Size;

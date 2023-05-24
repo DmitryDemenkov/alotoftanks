@@ -1,6 +1,8 @@
 package model;
 
 import events.*;
+import model.cellobjects.tank.Player;
+import model.cellobjects.tank.Tank;
 import model.environment.Environment;
 
 import java.util.*;

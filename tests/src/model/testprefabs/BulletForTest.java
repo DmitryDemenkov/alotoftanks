@@ -1,6 +1,6 @@
 package model.testprefabs;
 
-import model.Bullet;
+import model.cellobjects.damaging.Bullet;
 import model.Cell;
 import model.measures.Direction;
 import model.measures.Position;

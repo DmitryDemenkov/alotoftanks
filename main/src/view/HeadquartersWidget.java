@@ -1,6 +1,6 @@
 package view;
 
-import model.Headquarters;
+import model.cellobjects.tank.Headquarters;
 
 import java.awt.*;
 import java.io.File;

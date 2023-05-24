@@ -1,6 +1,9 @@
 package model.testprefabs;
 
 import model.*;
+import model.cellobjects.FuelOilBarrel;
+import model.cellobjects.tank.Headquarters;
+import model.cellobjects.tank.Tank;
 import model.environment.Environment;
 import model.measures.Direction;
 import model.measures.Position;

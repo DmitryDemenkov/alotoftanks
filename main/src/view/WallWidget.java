@@ -1,6 +1,6 @@
 package view;
 
-import model.Wall;
+import model.cellobjects.Wall;
 
 import java.io.File;
 

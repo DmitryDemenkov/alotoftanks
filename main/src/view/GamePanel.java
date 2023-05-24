@@ -4,7 +4,7 @@ import events.IGameEventListener;
 import events.ObjectInCellEvent;
 import model.measures.Direction;
 import model.Game;
-import model.Tank;
+import model.cellobjects.tank.Tank;
 import model.environment.SimpleEnvironment;
 
 import javax.swing.*;

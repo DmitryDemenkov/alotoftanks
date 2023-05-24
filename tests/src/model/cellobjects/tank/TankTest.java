@@ -1,9 +1,17 @@
-package model;
+package model.cellobjects.tank;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.Cell;
+import model.Field;
+import model.cellobjects.damaging.Bullet;
+import model.cellobjects.Obstacle;
+import model.cellobjects.Thicket;
+import model.cellobjects.Wall;
+import model.environment.Environment;
 import model.measures.Direction;
 import model.measures.Position;
+import model.measures.Size;
 import model.testprefabs.BulletForTest;
 import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +24,8 @@ public class TankTest {
 
     private Tank tank;
 
+    protected Field field;
+
     private class TankListener implements IObjectInCellEventListener {
         @Override
         public void onObjectInCellAction(ObjectInCellEvent event) {
@@ -27,6 +37,18 @@ public class TankTest {
 
     @BeforeEach
     public void testConfiguration(){
+        field = new Field(new Environment() {
+            @Override
+            public Size fieldSize() {
+                return new Size(1, 2);
+            }
+
+            @Override
+            public void fillField(Field field) {
+
+            }
+        });
+
         tank = new Tank(Direction.NORTH, 3);
     }
 
@@ -71,6 +93,15 @@ public class TankTest {
 
         Assertions.assertThrows(IllegalArgumentException.class, () ->
                 tank.faceWith(otherTank));
+    }
+
+    @Test
+    public void canFaceWith_collisionWithThicket(){
+        Thicket thicket = new Thicket();
+
+        boolean result = tank.canFaceWith(thicket);
+
+        Assertions.assertTrue(result);
     }
 
     @Test
@@ -129,9 +160,7 @@ public class TankTest {
 
     @Test
     public void move_movingInEmptyCell(){
-        Cell startCell = new Cell(new Position(0, 1));
-        Cell targetCell = new Cell(new Position(0, 0));
-        startCell.setNeighbour(targetCell);
+        Cell startCell = field.getCell(new Position(0, 1));
 
         startCell.addObject(tank);
         tank.rotate(Direction.NORTH);
@@ -153,9 +182,8 @@ public class TankTest {
 
     @Test
     public void move_movingInNotEmptyCell(){
-        Cell startCell = new Cell(new Position(0, 0));
-        Cell targetCell = new Cell(new Position(0, 1));
-        startCell.setNeighbour(targetCell);
+        Cell startCell = field.getCell(new Position(0, 1));
+        Cell targetCell = field.getCell(new Position(0, 0));
         Wall wall = new Wall();
 
         startCell.addObject(tank);
@@ -189,9 +217,7 @@ public class TankTest {
 
     @Test
     public void shoot_shootInEmptyCell(){
-        Cell startCell = new Cell(new Position(0, 1));
-        Cell targetCell = new Cell(new Position(0, 0));
-        startCell.setNeighbour(targetCell);
+        Cell startCell = field.getCell(new Position(0, 1));
 
         startCell.addObject(tank);
         tank.rotate(Direction.NORTH);

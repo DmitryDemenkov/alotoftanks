@@ -1,7 +1,13 @@
-package model;
+package model.cellobjects;
 
 import events.IGameEventListener;
 import events.ObjectInCellEvent;
+import model.Cell;
+import model.Game;
+import model.cellobjects.damaging.Bullet;
+import model.cellobjects.tank.Headquarters;
+import model.cellobjects.tank.Player;
+import model.cellobjects.tank.Tank;
 import model.measures.Direction;
 import model.measures.Position;
 import model.testprefabs.EnvironmentForTest;

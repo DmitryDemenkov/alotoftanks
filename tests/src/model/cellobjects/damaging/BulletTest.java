@@ -1,9 +1,17 @@
-package model;
+package model.cellobjects.damaging;
 
 import events.IObjectInCellEventListener;
 import events.ObjectInCellEvent;
+import model.*;
+import model.cellobjects.tank.Headquarters;
+import model.cellobjects.Obstacle;
+import model.cellobjects.Wall;
+import model.cellobjects.Water;
+import model.cellobjects.tank.Tank;
+import model.environment.Environment;
 import model.measures.Direction;
 import model.measures.Position;
+import model.measures.Size;
 import model.testprefabs.BulletForTest;
 import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
@@ -30,9 +38,20 @@ public class BulletTest {
 
     @BeforeEach
     public void createTestConfiguration(){
-        startCell = new Cell(new Position(0, 0));
-        targetCell = new Cell(new Position(0, 1));
-        startCell.setNeighbour(targetCell);
+        Field field = new Field(new Environment() {
+            @Override
+            public Size fieldSize() {
+                return new Size(1, 2);
+            }
+
+            @Override
+            public void fillField(Field field) {
+
+            }
+        });
+
+        startCell = field.getCell(new Position(0, 0));
+        targetCell = field.getCell(new Position(0, 1));
         bullet = new Bullet(Direction.SOUTH, startCell);
         events.clear();
     }

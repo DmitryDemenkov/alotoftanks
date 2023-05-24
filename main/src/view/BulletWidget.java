@@ -1,6 +1,6 @@
 package view;
 
-import model.Bullet;
+import model.cellobjects.damaging.Bullet;
 
 import java.awt.*;
 import java.io.File;

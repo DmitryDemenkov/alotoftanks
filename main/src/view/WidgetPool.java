@@ -1,6 +1,11 @@
 package view;
 
 import model.*;
+import model.cellobjects.*;
+import model.cellobjects.damaging.Bullet;
+import model.cellobjects.damaging.Explosion;
+import model.cellobjects.tank.Headquarters;
+import model.cellobjects.tank.Tank;
 
 import java.util.HashMap;
 import java.util.Map;

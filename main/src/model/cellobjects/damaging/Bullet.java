@@ -1,6 +1,9 @@
-package model;
+package model.cellobjects.damaging;
 
 import events.ObjectInCellEvent;
+import model.Cell;
+import model.ObjectInCell;
+import model.cellobjects.MovableObject;
 import model.measures.Direction;
 import model.properties.Damageable;
 import model.properties.Damaging;
@@ -31,7 +34,7 @@ public class Bullet extends MovableObject implements Damaging {
     }
 
     @Override
-    void faceWith(ObjectInCell object) {
+    protected void faceWith(ObjectInCell object) {
         super.faceWith(object);
 
         if (object instanceof Damageable){
@@ -40,7 +43,7 @@ public class Bullet extends MovableObject implements Damaging {
     }
 
     @Override
-    void update() {
+    protected void update() {
         if (_isDestroying){
             destroy();
         } else {

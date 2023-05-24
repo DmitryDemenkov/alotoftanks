@@ -1,6 +1,8 @@
-package model;
+package model.cellobjects;
 
 import events.ObjectInCellEvent;
+import model.cellobjects.damaging.Bullet;
+import model.cellobjects.tank.Tank;
 import model.testprefabs.BulletForTest;
 import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
