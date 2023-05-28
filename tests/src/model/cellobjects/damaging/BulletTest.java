@@ -13,6 +13,7 @@ import model.measures.Direction;
 import model.measures.Position;
 import model.measures.Size;
 import model.testprefabs.BulletForTest;
+import model.testprefabs.BulletKeeper;
 import model.testprefabs.TankForTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ public class BulletTest {
         Field field = new Field(new Environment() {
             @Override
             public Size fieldSize() {
-                return new Size(1, 2);
+                return new Size(1, 3);
             }
 
             @Override
@@ -186,6 +187,47 @@ public class BulletTest {
             Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
         }
         Assertions.assertTrue(bullet.isDestroying());
+    }
+
+    @Test
+    public void move_movingInBulletKeeper(){
+        targetCell.addObject(new  BulletKeeper());
+
+        bullet.addListener(new BulletListener());
+
+        bullet.move();
+
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.MOVED));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
+        Assertions.assertFalse(bullet.isDestroying());
+    }
+
+    @Test
+    public void move_movingFromBulletKeeper(){
+        targetCell.addObject(new BulletKeeper());
+
+        bullet.move();
+
+        bullet.addListener(new BulletListener());
+
+        bullet.move();
+
+        ArrayList<ObjectInCellEvent> expectedEvents = new ArrayList<>();
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.MOVED));
+        expectedEvents.add(new ObjectInCellEvent(bullet, ObjectInCellEvent.EventType.NEED_UPDATE));
+
+        Assertions.assertEquals(expectedEvents.size(), events.size());
+        for(int i = 0; i < events.size(); i++){
+            Assertions.assertEquals(expectedEvents.get(i).getType(), events.get(i).getType());
+            Assertions.assertEquals(expectedEvents.get(i).getObject(), events.get(i).getObject());
+        }
+        Assertions.assertFalse(bullet.isDestroying());
     }
 
     @Test void update_moving(){
