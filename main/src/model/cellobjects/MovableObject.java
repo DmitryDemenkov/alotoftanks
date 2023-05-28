@@ -22,13 +22,18 @@ public abstract class MovableObject extends ObjectInCell {
 
     /**
      * Перемещение объекта в соседнюю ячейку в текущем направлении
-     * @return true если побъект перемещен в новую ячейку
+     * @return true если объект перемещен в новую ячейку
      */
     protected boolean move(){
         Cell nextCell = getCell().getNeighbour(getDirection());
         return moveAt(nextCell);
     }
 
+    /**
+     * Перемещение объекта в указанную ячейку
+     * @param newCell новая ячейка
+     * @return true если объект перемещен в новую ячейку
+     */
     protected boolean moveAt(Cell newCell){
         if (newCell == null){
             return false;

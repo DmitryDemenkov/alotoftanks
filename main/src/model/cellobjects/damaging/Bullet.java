@@ -23,6 +23,9 @@ public class Bullet extends MovableObject implements Damaging {
         return _isDestroying;
     }
 
+    /**
+     * Состояние снаряда, true - если снаряд самостоятельно не движется
+     */
     private boolean _isFrozen = false;
 
     public Bullet(Direction direction, Cell startCell){
@@ -73,6 +76,9 @@ public class Bullet extends MovableObject implements Damaging {
         return isMoved;
     }
 
+    /**
+     * Испустить сообщение о перемещении
+     */
     private void fireMoved(){
         fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.MOVED));
         if (!_isFrozen){
@@ -82,6 +88,9 @@ public class Bullet extends MovableObject implements Damaging {
         }
     }
 
+    /**
+     * Уничтожить снаряд
+     */
     private void destroy(){
         getCell().takeObject(this);
         fireEvent(new ObjectInCellEvent(this, ObjectInCellEvent.EventType.DESTROYED));

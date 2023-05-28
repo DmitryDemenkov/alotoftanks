@@ -9,8 +9,14 @@ import model.measures.Direction;
 import model.properties.Damageable;
 import model.properties.Damaging;
 
+/**
+ * Бочка мазута
+ */
 public class FuelOilBarrel extends Obstacle implements Damageable {
 
+    /**
+     * Состояние бочки, true - если бочка взорвана
+     */
     private boolean _isDestroying = false;
 
     @Override
@@ -39,6 +45,9 @@ public class FuelOilBarrel extends Obstacle implements Damageable {
         }
     }
 
+    /**
+     * Взорваться
+     */
     private void detonate(){
         ExplosionListener listener = new ExplosionListener();
         for (Direction direction : Direction.values()){

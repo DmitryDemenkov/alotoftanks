@@ -39,6 +39,11 @@ public abstract class ObjectInCell {
         setCell(null);
     }
 
+    /* ------------------- Родитель ------------- */
+
+    /**
+     * Родитель объекта
+     */
     private ObjectKeeper<? extends ObjectInCell> _parent;
 
     protected void setParent(ObjectKeeper<? extends ObjectInCell> parent){
@@ -50,6 +55,11 @@ public abstract class ObjectInCell {
         _parent = parent;
     }
 
+    /**
+     * Может ли объект быть родителем объекта
+     * @param object проверяемы объект
+     * @return true - если объект может быть родителем
+     */
     protected boolean canBeParent(ObjectInCell object){
         boolean isObjectKeeper = false;
         if (object instanceof ObjectKeeper<?> objectKeeper){
@@ -58,12 +68,21 @@ public abstract class ObjectInCell {
         return isObjectKeeper;
     }
 
-    private boolean canBeParent(ObjectKeeper<? extends ObjectInCell> parent){
-        return parent.getObjectClass().isAssignableFrom(this.getClass());
+    /**
+     * Может ли хранитель быть родителем объекта
+     * @param keeper проверяемый хранитель
+     * @return true - если хранитель может быть родителем
+     */
+    private boolean canBeParent(ObjectKeeper<? extends ObjectInCell> keeper){
+        return keeper.getObjectClass().isAssignableFrom(this.getClass());
     }
 
     /* -------------------------- Взаимодействие с другими объектами --------------- */
 
+    /**
+     * Состояние объекта
+     * @return true - если объект уничтожен
+     */
     public abstract boolean isDestroying();
 
     /**

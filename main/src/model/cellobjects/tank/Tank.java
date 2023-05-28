@@ -132,6 +132,9 @@ public class Tank extends MovableObject implements Damageable {
         return _health;
     }
 
+    /**
+     * Полученный танком урон
+     */
     private int takenDamage = 0;
 
     @Override

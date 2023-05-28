@@ -5,8 +5,14 @@ import model.Cell;
 import model.ObjectInCell;
 import model.properties.Damaging;
 
+/**
+ * Взрыв - поражающий объект, который поражает только одну ячейку
+ */
 public class Explosion extends ObjectInCell implements Damaging {
 
+    /**
+     * Состояние взрыва, true - если взрыв уничтожен
+     */
     private boolean _isDestroying = false;
 
     @Override

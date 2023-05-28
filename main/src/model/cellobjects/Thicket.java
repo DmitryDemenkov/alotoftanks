@@ -6,8 +6,14 @@ import model.ObjectInCell;
 import model.cellobjects.tank.Tank;
 import model.properties.ObjectKeeper;
 
+/**
+ * Заросли
+ */
 public class Thicket extends Obstacle implements ObjectKeeper<Tank> {
 
+    /**
+     * Танк, который находится в заросли
+     */
     private Tank _tank;
 
     @Override
