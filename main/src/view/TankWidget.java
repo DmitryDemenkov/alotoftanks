@@ -1,6 +1,7 @@
 package view;
 
 import model.cellobjects.tank.Tank;
+import view.utils.ColorUtil;
 
 import java.awt.*;
 import java.io.File;
@@ -78,7 +79,7 @@ public class TankWidget extends MovableObjectWidget {
      * @return файл с изоборажением танка
      */
     private File getImageFileByColor(Color color){
-        String path = color == Color.BLUE ? "resources/blue_tank.png" : "resources/orange_tank.png";
+        String path = "resources/" + ColorUtil.ColorName(color) + "_tank.png";
         return new File(path);
     }
 }

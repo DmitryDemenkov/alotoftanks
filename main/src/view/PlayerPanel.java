@@ -2,6 +2,7 @@ package view;
 
 import model.cellobjects.tank.Player;
 import model.measures.Direction;
+import view.utils.ColorUtil;
 import view.utils.ImageUtils;
 
 import javax.imageio.ImageIO;
@@ -73,6 +74,15 @@ public class PlayerPanel extends JPanel {
         revalidate();
     }
 
+    private final static Map<Color, String> names = Map.ofEntries(
+            Map.entry(Color.BLUE, "Синий"),
+            Map.entry(Color.ORANGE, "Оранжевый")
+    );
+
+    public String getName(){
+        return names.get(_color);
+    }
+
     /**
      * Получить панель с жизнями игрока
      * @return панель с жизнями игрока
@@ -118,7 +128,7 @@ public class PlayerPanel extends JPanel {
      * @return изображение флага
      */
     private BufferedImage getFlagImage(){
-        String path = _color == Color.BLUE ? "resources/blue_flag.png" : "resources/orange_flag.png";
+        String path = "resources/" + ColorUtil.ColorName(_color) + "_flag.png";
 
         return getImage(new File(path), new Dimension(100, 100));
     }

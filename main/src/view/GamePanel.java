@@ -119,20 +119,12 @@ public class GamePanel extends JFrame {
             if (state == Game.State.GAME_IS_ON){
                 _playerPanels.get(_game.activePlayer()).setActive(true);
             } else if (state == Game.State.WINNER_FOUND){
-                String winnerName = getColorName(((TankWidget)_pool.getWidget(_game.winner().getTank())).getColor());
+                String winnerName = _playerPanels.get(_game.winner()).getName();
                 JOptionPane.showMessageDialog(GamePanel.this, winnerName + " танк победил");
                 restart();
             } else if (state == Game.State.DRAW) {
                 JOptionPane.showMessageDialog(GamePanel.this, "Игра завершилась вничью");
                 restart();
-            }
-        }
-
-        private String getColorName(Color color){
-            if (color == Color.BLUE){
-                return "Синий";
-            } else {
-                return "Оранжевый";
             }
         }
     }

@@ -1,6 +1,7 @@
 package view;
 
 import model.cellobjects.tank.Headquarters;
+import view.utils.ColorUtil;
 
 import java.awt.*;
 import java.io.File;
@@ -46,7 +47,7 @@ public class HeadquartersWidget extends ObjectInCellWidget{
      * @return файл с изображением штаба
      */
     private File getImageFileByColor(Color color) {
-        String path = color == Color.BLUE ? "resources/blue_HQ.png" : "resources/orange_HQ.png";
+        String path = "resources/" + ColorUtil.ColorName(color) + "_HQ.png";
         return new File(path);
     }
 }
