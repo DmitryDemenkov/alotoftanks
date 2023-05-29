@@ -24,6 +24,14 @@ public class Game {
     public Game(Environment environment){
         _field = new Field(environment);
         _field.addObjectInCellListener(new ObjectListener());
+
+        ArrayList<Tank> tanks = _field.getTanks();
+        PlayerListener playerListener = new PlayerListener();
+        for (Tank tank : tanks){
+            Player player = new Player(tank);
+            player.addListener(playerListener);
+            _players.add(player);
+        }
     }
 
     /* ----------------- Игровое поле ----------------- */
@@ -41,14 +49,6 @@ public class Game {
      * Запуск игры
      */
     public void start() {
-        ArrayList<Tank> tanks = _field.getTanks();
-        PlayerListener playerListener = new PlayerListener();
-        for (Tank tank : tanks){
-            Player player = new Player(tank);
-            player.addListener(playerListener);
-            _players.add(player);
-        }
-
         _activePlayer = _players.get(0);
         activePlayer().setActive(true);
     }
@@ -56,6 +56,10 @@ public class Game {
     /* ---------------- Танки ----------------- */
 
     private final ArrayList<Player> _players = new ArrayList<>();
+
+    public List<Player> getPlayers(){
+        return Collections.unmodifiableList(_players);
+    }
 
     /**
      * Текущий активный танк, которым можно управлять

@@ -1,14 +1,18 @@
 package view;
 
-import model.cellobjects.tank.Tank;
+import model.cellobjects.tank.Player;
+import model.measures.Direction;
 import view.utils.ImageUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Представление панели игрока
@@ -16,9 +20,11 @@ import java.io.IOException;
 public class PlayerPanel extends JPanel {
 
     /**
-     * Танк игрока
+     * Игрок
      */
-    private final Tank _tank;
+    private final Player _player;
+
+    private final TankWidget _tankWidget;
 
     /**
      * Максимальное кол-во жизней игрока
@@ -30,16 +36,29 @@ public class PlayerPanel extends JPanel {
      */
     private final Color _color;
 
-    public PlayerPanel(TankWidget tankWidget){
-        _tank = (Tank) tankWidget.getObject();
-        _maxHeath = _tank.getHealth();
-        _color = tankWidget.getColor();
+    public PlayerPanel(Player player, Color color, WidgetPool widgetPool){
+        _player = player;
+        _tankWidget = (TankWidget) widgetPool.getWidget(_player.getTank());
+        HeadquartersWidget headquartersWidget = (HeadquartersWidget) widgetPool.getWidget(_player.getTank().getHeadquarters());
+
+        _color = color;
+        _tankWidget.setColor(color);
+        headquartersWidget.setColor(color);
+
+        _maxHeath = _player.getTank().getHealth();
 
         setPreferredSize(new Dimension(150, 600));
         setLayout(new GridLayout(3, 1, 0, 50));
         setBackground(Color.BLACK);
+        addKeyListener(new KeyListener());
 
         update();
+    }
+
+    public void setActive(boolean active){
+        _tankWidget.setActive(active);
+        setFocusable(active);
+        requestFocus();
     }
 
     /**
@@ -64,7 +83,7 @@ public class PlayerPanel extends JPanel {
         heathBar.setBackground(Color.BLACK);
 
         for (int i = 1; i <= _maxHeath; i++){
-            boolean heathActive = i <= _tank.getHealth();
+            boolean heathActive = i <= _player.getTank().getHealth();
             heathBar.add(new JLabel(new ImageIcon(getHeartImage(heathActive))));
         }
 
@@ -113,9 +132,9 @@ public class PlayerPanel extends JPanel {
         reloadPanel.setLayout(new GridBagLayout());
         reloadPanel.setBackground(Color.BLACK);
 
-        JLabel label = null;
-        if (_tank.getCurrentReloadTime() > 0){
-            label = new JLabel(Integer.toString(_tank.getCurrentReloadTime()),
+        JLabel label;
+        if (_player.getTank().getCurrentReloadTime() > 0){
+            label = new JLabel(Integer.toString(_player.getTank().getCurrentReloadTime()),
                     new ImageIcon(getReloadImage(false)),
                     JLabel.CENTER);
             label.setHorizontalTextPosition(JLabel.RIGHT);
@@ -156,5 +175,62 @@ public class PlayerPanel extends JPanel {
             e.printStackTrace();
         }
         return image;
+    }
+
+    /**
+     * Слушатель пользовательского ввода
+     */
+    private class KeyListener implements java.awt.event.KeyListener{
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            setActive(false);
+            int key = e.getKeyCode();
+            move(key);
+            pass(key);
+            shoot(key);
+            rotate(key);
+            setActive(_player.isActive());
+        }
+
+        private void move(int keyCode){
+            if (keyCode == KeyEvent.VK_SPACE){
+                _player.move();
+            }
+        }
+
+        private void shoot(int keyCode){
+            if (keyCode == KeyEvent.VK_ENTER){
+                _player.shoot();
+            }
+        }
+
+        private void pass(int keyCode){
+            if (keyCode == KeyEvent.VK_BACK_SPACE){
+                _player.pass();
+            }
+        }
+
+        private void rotate(int keyCode){
+            Map<Integer, Direction> keyCodeToDirection = new HashMap<>();
+            keyCodeToDirection.put(KeyEvent.VK_W, Direction.NORTH);
+            keyCodeToDirection.put(KeyEvent.VK_A, Direction.WEST);
+            keyCodeToDirection.put(KeyEvent.VK_S, Direction.SOUTH);
+            keyCodeToDirection.put(KeyEvent.VK_D, Direction.EAST);
+
+            if (keyCodeToDirection.containsKey(keyCode)){
+                _player.rotate(keyCodeToDirection.get(keyCode));
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+        }
     }
 }
