@@ -22,6 +22,11 @@ public class ExplosionWidget extends ObjectInCellWidget{
     }
 
     @Override
+    public Layer getLayer(){
+        return Layer.TOP;
+    }
+
+    @Override
     protected void getDamage(){
         repaint();
         revalidate();
