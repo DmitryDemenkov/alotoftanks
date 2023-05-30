@@ -1,7 +1,6 @@
 package view;
 
 import model.Cell;
-import model.ObjectInCell;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,16 +27,11 @@ public class CellWidget extends JPanel {
      */
     private final Cell _cell;
 
-    public CellWidget(Cell cell, WidgetPool pool){
+    public CellWidget(Cell cell){
         _cell = cell;
         setPreferredSize(getDimension());
         setBackground(BACKGROUND);
         setLayout(new GridBagLayout());
-
-        for (ObjectInCell object : cell.getObjects()){
-            ObjectInCellWidget widget = pool.getWidget(object);
-            addObjectWidget(widget);
-        }
     }
 
     /**
@@ -71,9 +65,11 @@ public class CellWidget extends JPanel {
      * @param widget виджет добавляемого объекта
      */
     void addObjectWidget(ObjectInCellWidget widget){
-        widget.setCellWidget(this);
-        _layers.add(widget);
-        repaintLayers();
+        if (!_layers.contains(widget)) {
+            widget.setCellWidget(this);
+            _layers.add(widget);
+            repaintLayers();
+        }
     }
 
     /**
@@ -81,9 +77,11 @@ public class CellWidget extends JPanel {
      * @param widget удаляемый виджет
      */
     void removeObjectWidget(ObjectInCellWidget widget){
-        widget.setCellWidget(null);
-        _layers.remove(widget);
-        repaintLayers();
+        if (_layers.contains(widget)) {
+            widget.setCellWidget(null);
+            _layers.remove(widget);
+            repaintLayers();
+        }
     }
 
     /**

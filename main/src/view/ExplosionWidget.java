@@ -7,9 +7,8 @@ import java.io.File;
 
 public class ExplosionWidget extends ObjectInCellWidget{
 
-    public ExplosionWidget(Explosion explosion, CellWidget cellWidget) {
+    public ExplosionWidget(Explosion explosion) {
         super(explosion);
-        cellWidget.addObjectWidget(this);
     }
 
     @Override

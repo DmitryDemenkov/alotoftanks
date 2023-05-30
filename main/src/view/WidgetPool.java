@@ -1,11 +1,6 @@
 package view;
 
 import model.*;
-import model.cellobjects.*;
-import model.cellobjects.damaging.Bullet;
-import model.cellobjects.damaging.Explosion;
-import model.cellobjects.tank.Headquarters;
-import model.cellobjects.tank.Tank;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +9,8 @@ import java.util.Map;
  * Пул виджетов, расположенных на поле
  */
 public class WidgetPool {
+
+    private final WidgetFactory _factory = new WidgetFactory();
 
     private final Map<ObjectInCell, ObjectInCellWidget> _objectWidgets = new HashMap<>();
 
@@ -36,25 +33,8 @@ public class WidgetPool {
             throw new IllegalArgumentException();
         }
 
-        ObjectInCellWidget widget = null;
-        if (object instanceof Tank tank){
-            widget = new TankWidget(tank);
-        } else if (object instanceof Wall wall){
-            widget = new WallWidget(wall);
-        } else if (object instanceof Headquarters headquarters){
-            widget = new HeadquartersWidget(headquarters);
-        } else if (object instanceof Water water){
-            widget = new WaterWidget(water);
-        } else if (object instanceof Bullet bullet){
-            widget = new BulletWidget(bullet);
-        } else if (object instanceof Thicket thicket){
-            widget = new ThicketWidget(thicket);
-        } else if (object instanceof Explosion explosion) {
-            widget = new ExplosionWidget(explosion, getWidget(explosion.getCell()));
-        } else if (object instanceof FuelOilBarrel barrel){
-            widget = new FuelOilBarrelWidget(barrel);
-        }
-
+        ObjectInCellWidget widget = _factory.createWidget(object);
+        getWidget(object.getCell()).addObjectWidget(widget);
         _objectWidgets.put(object, widget);
         return widget;
     }
@@ -72,8 +52,11 @@ public class WidgetPool {
             throw new IllegalArgumentException();
         }
 
-        CellWidget widget = new CellWidget(cell, this);
+        CellWidget widget = _factory.createWidget(cell);
         _cellWidgets.put(cell, widget);
+        for (ObjectInCell object : cell.getObjects()) {
+            createWidget(object);
+        }
         return widget;
     }
 }
