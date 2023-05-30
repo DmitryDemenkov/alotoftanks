@@ -4,6 +4,7 @@ import events.IGameEventListener;
 import events.ObjectInCellEvent;
 import model.cellobjects.tank.Player;
 import model.Game;
+import model.environment.RandomEnvironment;
 import model.environment.SimpleEnvironment;
 
 import javax.swing.*;
@@ -44,7 +45,7 @@ public class GamePanel extends JFrame {
      * Создать игру и ее представление
      */
     private void create(){
-        _game = new Game(new SimpleEnvironment());
+        _game = new Game(new RandomEnvironment());
         FieldWidget fieldWidget = new FieldWidget(_game.getField(), _pool);
         _game.addListener(new GameListener());
 
